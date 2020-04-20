@@ -125,6 +125,9 @@ Our tests use the pytest framework.
 
 The `bumpversion.sh` script helps bump the project version. You can execute the script using `{major|minor|patch}` as first argument, to bump the version accordingly.
 
+##Attribution
+This project is based in the [Ocean Protocol Aquarius](https://github.com/oceanprotocol/aquarius). It keeps the same Apache v2 License and adds some improvements.
+
 ## License
 
 Copyright 2018 Ocean Protocol Foundation Ltd.
