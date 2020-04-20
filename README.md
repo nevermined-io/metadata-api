@@ -129,8 +129,8 @@ The `bumpversion.sh` script helps bump the project version. You can execute the 
 This project is based in the [Ocean Protocol Aquarius](https://github.com/oceanprotocol/aquarius). It keeps the same Apache v2 License and adds some improvements.
 
 ## License
-
-Copyright 2018 Ocean Protocol Foundation Ltd.
+```
+Copyright 2020 Keyko GmbH.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -143,3 +143,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
