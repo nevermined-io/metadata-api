@@ -93,7 +93,7 @@ aquarius.url = http://localhost:5000
 Then execute this command:
 
 ```bash
-gunicorn --certfile cert.pem --keyfile key.pem -b 0.0.0.0:5000 -w 1 aquarius.run:app
+gunicorn --certfile cert.pem --keyfile key.pem -b 0.0.0.0:5000 -w 1 nevermind_metadata.run:app
 ```
 
 ### Configuration
