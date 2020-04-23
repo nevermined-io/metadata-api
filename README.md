@@ -2,24 +2,19 @@
 
 # nevermind-metadata
 
-> 🐋 Aquarius provides an off-chain database store for metadata about data assets.
-> It's part of the [Ocean Protocol](https://oceanprotocol.com) software stack.
+> Nevermind metadata provides an off-chain database store for metadata about data assets.
 
-Note: Aquarius was formerly known as the Provider.
+![Nevermind metadata](https://github.com/keyko-io/nevermind-metadata/workflows/Python%20package/badge.svg)
+[![Docker Build Status](https://img.shields.io/docker/build/keykoio/nevermind-metadata.svg)](https://hub.docker.com/r/keykoio/nevermind-metadata/) 
+[![GitHub contributors](https://img.shields.io/github/contributors/keyko-io/nevermind-metadata.svg)](https://github.com/keyko-io/nevermind-metadata/graphs/contributors)
 
-___"Aquarius is a constellation of the zodiac, situated between Capricornus and Pisces. Its name is Latin for "water-carrier" or "cup-carrier. Aquarius is one of the oldest of the recognized constellations along the zodiac (the Sun's apparent path)."___
+## For Metadata Operators
 
-[![Docker Build Status](https://img.shields.io/docker/build/oceanprotocol/aquarius.svg)](https://hub.docker.com/r/oceanprotocol/aquarius/) [![Travis (.com)](https://img.shields.io/travis/com/oceanprotocol/aquarius.svg)](https://travis-ci.com/oceanprotocol/aquarius) [![Codacy coverage](https://img.shields.io/codacy/coverage/10c8fddd5e8547c29de4906410a16ae7.svg)](https://app.codacy.com/project/ocean-protocol/aquarius/dashboard) [![PyPI](https://img.shields.io/pypi/v/ocean-aquarius.svg)](https://pypi.org/project/ocean-aquarius/) [![GitHub contributors](https://img.shields.io/github/contributors/oceanprotocol/aquarius.svg)](https://github.com/oceanprotocol/aquarius/graphs/contributors)
+If you're developing a marketplace, you'll want to run Nevermind Metadata and several other components locally, and the easiest way to do that is to use Nevermind tools. See the instructions in [Nevemind tools repository](https://github.com/keyko-io/nevermind-tools).
 
-## For Aquarius Operators
+## For Metadata API Users
 
-If you're developing a marketplace, you'll want to run Aquarius and several other components locally, and the easiest way to do that is to use Barge. See the instructions in [the Barge repository](https://github.com/oceanprotocol/barge).
-
-## For Aquarius API Users
-
-The Ocean Protocol docs site has [documentation about the Aquarius API](https://docs.oceanprotocol.com/references/aquarius/). Note that it shows the docs for the version currently deployed with the Nile Testnet. To get documentation for other versions, there is a "past versions" link at the top of the page.
-
-If you have Aquarius running locally, you can find API documentation at
+If you have Nevermind metadata running locally, you can find API documentation at
 [http://localhost:5000/api/v1/docs](http://localhost:5000/api/v1/docs) or maybe
 [http://0.0.0.0:5000/api/v1/docs](http://0.0.0.0:5000/api/v1/docs).
 
@@ -28,47 +23,47 @@ Tip 1: If that doesn't work, then try `https`.
 Tip 2: If your browser shows the Swagger header across the top but says "Failed to load spec." then we found that, in Chrome, if we went to `chrome://flags/#allow-insecure-localhost` and toggled it to Enabled, then relaunched Chrome, it worked.
 
 If you want to know more about the ontology of the metadata, you can find all the information in
-[OEP-8](https://github.com/oceanprotocol/OEPs/tree/master/8).
+[Metadata Ontology](https://github.com/keyko-io/nevermind-internal/tree/master/docs/architecture/specs/metadata).
 
-## For Aquarius Developers
+## For Metadata Developers
 
-### General Ocean Dev Docs
+### General Keyko Dev Docs
 
-For information about Ocean's Python code style and related "meta" developer docs, see [the oceanprotocol/dev-ocean repository](https://github.com/oceanprotocol/dev-ocean).
+For information about Keyko's Python code style and related "meta" developer docs, see [Keyko Nevermind Internal](https://github.com/keyko-io/nevermind-internal).
 
 ### Running Locally, for Dev and Test
 
 First, clone this repository:
 
 ```bash
-git clone git@github.com:oceanprotocol/aquarius.git
-cd aquarius/
+git clone git@github.com:keyko-io/nevermind-metadata.git
+cd nevermind-metadata/
 ```
 
-Then run mongodb database that is a requirement for Aquarius. MongoDB can be installed directly using instructions from [official documentation](https://docs.mongodb.com/manual/installation/). Or if you have `docker` installed, you can run:
+Then run mongodb database that is a requirement for Nevermind Metadata. MongoDB can be installed directly using instructions from [official documentation](https://docs.mongodb.com/manual/installation/). Or if you have `docker` installed, you can run:
 
 ```bash
 docker run -d -p 27017:27017 mongo
 ```
 
-Note that it runs MongoDB but the Aquarius can also work with BigchainDB or Elasticsearch. If you want to run ElasticSearch or BigchainDB, update the file `config.ini` and run the Database engine with your preferred method.
+Note that it runs MongoDB but the Nevermind Metadata can also work with Elasticsearch. If you want to run ElasticSearch, update the file `config.ini` and run the Database engine with your preferred method.
 
-Then install Aquarius's OS-level requirements:
+Then install Neverminds Metadata's OS-level requirements:
 
 ```bash
 sudo apt update
 sudo apt install python3-dev python3.7-dev libssl-dev
 ```
 
-(Note: At the time of writing, `python3-dev` was for Python 3.6. `python3.7-dev` is needed if you want to test against Python 3.7 locally. BigchainDB needs `libssl-dev`.)
+(Note: At the time of writing, `python3-dev` was for Python 3.6. `python3.7-dev` is needed if you want to test against Python 3.7 locally.)
 
-Before installing Aquarius's Python package requirements, you should create and activate a virtualenv (or equivalent).
+Before installing Nevermind Metadatas's Python package requirements, you should create and activate a virtualenv (or equivalent).
 
 The most simple way to start is:
 
 ```bash
 pip install -r requirements.txt
-export FLASK_APP=aquarius/run.py
+export FLASK_APP=nevermind_metadata/run.py
 export CONFIG_FILE=config.ini
 flask run
 ```
@@ -87,7 +82,7 @@ and when it asks for the Common Name (CN), answer `localhost`
 Then edit the config file `config.ini` so that:
 
 ```yaml
-aquarius.url = http://localhost:5000
+metadata.url = http://localhost:5000
 ```
 
 Then execute this command:
@@ -103,16 +98,16 @@ You can pass the configuration using the CONFIG_FILE environment variable (recom
 In the configuration there are now two sections:
 
 - oceandb: Contains different values to connect with oceandb. You can find more information about how to use OceanDB [here](https://github.com/oceanprotocol/oceandb-driver-interface).
-- resources: In this section we are showing the url in which the aquarius is going to be deployed.
+- resources: In this section we are showing the url in which the nevermind metadata is going to be deployed.
 
 ```yaml
 [resources]
-aquarius.url = http://localhost:5000
+metadata.url = http://localhost:5000
 ```
 
 ### Testing
 
-Automatic tests are set up via Travis, executing `tox`.
+Automatic tests are set up via Github actions.
 Our tests use the pytest framework.
 
 ### New Version

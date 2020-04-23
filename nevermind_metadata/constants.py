@@ -7,12 +7,13 @@ class ConfigSections:
 
 
 class BaseURLs:
-    BASE_AQUARIUS_URL = '/api/v1/aquarius'
+    BASE_METADATA_URL = '/api/v1/metadata'
     SWAGGER_URL = '/api/v1/docs'  # URL for exposing Swagger UI (without trailing '/')
-    ASSETS_URL = BASE_AQUARIUS_URL + '/assets'
+    ASSETS_URL = BASE_METADATA_URL + '/assets'
 
 
 class Metadata:
-    TITLE = 'Aquarius'
-    DESCRIPTION = 'Aquarius provides an off-chain database store for metadata about data assets. ' \
+    TITLE = 'Nevermind metadata'
+    DESCRIPTION = 'Nevermind metadata provides an off-chain database store for metadata about ' \
+                  'data assets. ' \
                   'When running with our Docker images, it is exposed under:'
