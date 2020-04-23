@@ -14,8 +14,6 @@ If you're developing a marketplace, you'll want to run Nevermind Metadata and se
 
 ## For Aquarius API Users
 
-The Ocean Protocol docs site has [documentation about the Aquarius API](https://docs.oceanprotocol.com/references/aquarius/). Note that it shows the docs for the version currently deployed with the Nile Testnet. To get documentation for other versions, there is a "past versions" link at the top of the page.
-
 If you have Nevermind metadata running locally, you can find API documentation at
 [http://localhost:5000/api/v1/docs](http://localhost:5000/api/v1/docs) or maybe
 [http://0.0.0.0:5000/api/v1/docs](http://0.0.0.0:5000/api/v1/docs).
