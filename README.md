@@ -4,15 +4,15 @@
 
 > Nevermind metadata provides an off-chain database store for metadata about data assets.
 
-[![Docker Build Status](https://img.shields.io/docker/build/keykoio/nevermind-metadata.svg)](https://hub.docker.com/r/keykoio/nevermind-metadata/) 
 ![Nevermind metadata](https://github.com/keyko-io/nevermind-metadata/workflows/Python%20package/badge.svg)
+[![Docker Build Status](https://img.shields.io/docker/build/keykoio/nevermind-metadata.svg)](https://hub.docker.com/r/keykoio/nevermind-metadata/) 
 [![GitHub contributors](https://img.shields.io/github/contributors/keyko-io/nevermind-metadata.svg)](https://github.com/keyko-io/nevermind-metadata/graphs/contributors)
 
-## For Aquarius Operators
+## For Metadata Operators
 
 If you're developing a marketplace, you'll want to run Nevermind Metadata and several other components locally, and the easiest way to do that is to use Nevermind tools. See the instructions in [Nevemind tools repository](https://github.com/keyko-io/nevermind-tools).
 
-## For Aquarius API Users
+## For Metadata API Users
 
 If you have Nevermind metadata running locally, you can find API documentation at
 [http://localhost:5000/api/v1/docs](http://localhost:5000/api/v1/docs) or maybe
@@ -25,9 +25,9 @@ Tip 2: If your browser shows the Swagger header across the top but says "Failed 
 If you want to know more about the ontology of the metadata, you can find all the information in
 [Metadata Ontology](https://github.com/keyko-io/nevermind-internal/tree/master/docs/architecture/specs/metadata).
 
-## For Aquarius Developers
+## For Metadata Developers
 
-### General Ocean Dev Docs
+### General Keyko Dev Docs
 
 For information about Keyko's Python code style and related "meta" developer docs, see [Keyko Nevermind Internal](https://github.com/keyko-io/nevermind-internal).
 
@@ -40,7 +40,7 @@ git clone git@github.com:keyko-io/nevermind-metadata.git
 cd nevermind-metadata/
 ```
 
-Then run mongodb database that is a requirement for Aquarius. MongoDB can be installed directly using instructions from [official documentation](https://docs.mongodb.com/manual/installation/). Or if you have `docker` installed, you can run:
+Then run mongodb database that is a requirement for Nevermind Metadata. MongoDB can be installed directly using instructions from [official documentation](https://docs.mongodb.com/manual/installation/). Or if you have `docker` installed, you can run:
 
 ```bash
 docker run -d -p 27017:27017 mongo
