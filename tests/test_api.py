@@ -13,7 +13,7 @@ from tests.conftest import (json_before, json_dict, json_dict2, json_dict_no_met
 def test_version(client):
     """Test version in root endpoint"""
     rv = client.get('/')
-    assert json.loads(rv.data.decode('utf-8'))['software'] == 'Aquarius'
+    assert json.loads(rv.data.decode('utf-8'))['software'] == 'Nevermind metadata'
     assert json.loads(rv.data.decode('utf-8'))['version'] == get_version()
 
 
@@ -139,7 +139,7 @@ def test_query_metadata(client, base_ddo_url):
 
     finally:
         for a in test_assets:
-            client.delete(BaseURLs.BASE_AQUARIUS_URL + '/assets/ddo/%s' % a['id'])
+            client.delete(BaseURLs.BASE_METADATA_URL + '/assets/ddo/%s' % a['id'])
 
 
 def test_delete_all(client_with_no_data, base_ddo_url):
@@ -150,17 +150,17 @@ def test_delete_all(client_with_no_data, base_ddo_url):
                              data=json.dumps(json_update),
                              content_type='application/json')
     assert len(json.loads(
-        client_with_no_data.get(BaseURLs.BASE_AQUARIUS_URL + '/assets').data.decode('utf-8'))[
+        client_with_no_data.get(BaseURLs.BASE_METADATA_URL + '/assets').data.decode('utf-8'))[
                    'ids']) == 2
     client_with_no_data.delete(base_ddo_url)
     assert len(json.loads(
-        client_with_no_data.get(BaseURLs.BASE_AQUARIUS_URL + '/assets').data.decode('utf-8'))[
+        client_with_no_data.get(BaseURLs.BASE_METADATA_URL + '/assets').data.decode('utf-8'))[
                    'ids']) == 0
 
 
 def test_is_listed(client, base_ddo_url):
     assert len(json.loads(
-        client.get(BaseURLs.BASE_AQUARIUS_URL + '/assets').data.decode('utf-8'))['ids']
+        client.get(BaseURLs.BASE_METADATA_URL + '/assets').data.decode('utf-8'))['ids']
                ) == 2
 
     client.put(
@@ -168,7 +168,7 @@ def test_is_listed(client, base_ddo_url):
         data=json.dumps(json_dict2),
         content_type='application/json')
     assert len(json.loads(
-        client.get(BaseURLs.BASE_AQUARIUS_URL + '/assets').data.decode('utf-8'))['ids']
+        client.get(BaseURLs.BASE_METADATA_URL + '/assets').data.decode('utf-8'))['ids']
                ) == 1
     assert len(json.loads(
         client.post(base_ddo_url + '/query',

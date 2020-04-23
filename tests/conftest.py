@@ -13,7 +13,7 @@ app = app
 
 @pytest.fixture
 def base_ddo_url():
-    return BaseURLs.BASE_AQUARIUS_URL + '/assets/ddo'
+    return BaseURLs.BASE_METADATA_URL + '/assets/ddo'
 
 
 @pytest.fixture
@@ -25,20 +25,20 @@ def client_with_no_data():
 @pytest.fixture
 def client():
     client = app.test_client()
-    client.delete(BaseURLs.BASE_AQUARIUS_URL + '/assets/ddo')
-    post = client.post(BaseURLs.BASE_AQUARIUS_URL + '/assets/ddo',
+    client.delete(BaseURLs.BASE_METADATA_URL + '/assets/ddo')
+    post = client.post(BaseURLs.BASE_METADATA_URL + '/assets/ddo',
                        data=json.dumps(json_update),
                        content_type='application/json')
-    post2 = client.post(BaseURLs.BASE_AQUARIUS_URL + '/assets/ddo',
+    post2 = client.post(BaseURLs.BASE_METADATA_URL + '/assets/ddo',
                         data=json.dumps(json_dict),
                         content_type='application/json')
 
     yield client
 
     client.delete(
-        BaseURLs.BASE_AQUARIUS_URL + '/assets/ddo/%s' % json.loads(post.data.decode('utf-8'))['id'])
+      BaseURLs.BASE_METADATA_URL + '/assets/ddo/%s' % json.loads(post.data.decode('utf-8'))['id'])
     client.delete(
-        BaseURLs.BASE_AQUARIUS_URL + '/assets/ddo/%s' % json.loads(post2.data.decode('utf-8'))[
+      BaseURLs.BASE_METADATA_URL + '/assets/ddo/%s' % json.loads(post2.data.decode('utf-8'))[
             'id'])
 
 
@@ -68,8 +68,8 @@ json_dict = {
     },
     {
       "type": "access",
-      "serviceEndpoint": "http://localhost:8030/api/v1/brizo/services/consume",
-      "purchaseEndpoint": "http://localhost:8030/api/v1/brizo/services/access/initialize",
+      "serviceEndpoint": "http://localhost:8030/api/v1/gateway/services/consume",
+      "purchaseEndpoint": "http://localhost:8030/api/v1/gateway/services/access/initialize",
       "index": 1,
       "templateId": "0x208aca4B0316C9996F085cbD57E01c11Bc0E7cb1",
       "name": "dataAssetAccessServiceAgreement",
@@ -220,7 +220,7 @@ json_dict = {
     },
     {
       "type": "metadata",
-      "serviceEndpoint": "http://localhost:5000/api/v1/aquarius/assets/ddo/did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
+      "serviceEndpoint": "http://localhost:5000/api/v1/metadata/assets/ddo/did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
       "attributes": {
         "main": {
           "name": "Ocean protocol white paper",
@@ -332,8 +332,8 @@ json_dict2 = {
     },
     {
       "type": "access",
-      "serviceEndpoint": "http://localhost:8030/api/v1/brizo/services/consume",
-      "purchaseEndpoint": "http://localhost:8030/api/v1/brizo/services/access/initialize",
+      "serviceEndpoint": "http://localhost:8030/api/v1/gateway/services/consume",
+      "purchaseEndpoint": "http://localhost:8030/api/v1/gateway/services/access/initialize",
       "index": 1,
       "templateId": "0x208aca4B0316C9996F085cbD57E01c11Bc0E7cb1",
       "name": "dataAssetAccessServiceAgreement",
@@ -484,7 +484,7 @@ json_dict2 = {
     },
     {
       "type": "metadata",
-      "serviceEndpoint": "http://localhost:5000/api/v1/aquarius/assets/ddo/did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
+      "serviceEndpoint": "http://localhost:5000/api/v1/metadata/assets/ddo/did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
       "attributes": {
         "main": {
           "name": "Ocean protocol white paper",
@@ -614,19 +614,19 @@ json_before = {
         {
             "type": "Consume",
             "index": 0,
-            "serviceEndpoint": "http://mybrizo.org/api/v1/brizo/services/consume?pubKey=${"
+            "serviceEndpoint": "http://mygateway.org/api/v1/gateway/services/consume?pubKey=${"
                                "pubKey}&serviceId={serviceId}&url={url}"
         },
         {
             "type": "Compute",
             "index": 1,
-            "serviceEndpoint": "http://mybrizo.org/api/v1/brizo/services/compute?pubKey=${"
+            "serviceEndpoint": "http://mygateway.org/api/v1/gateway/services/compute?pubKey=${"
                                "pubKey}&serviceId={serviceId}&algo={algo}&container={container}"
         },
         {
             "type": "metadata",
             "index": 2,
-            "serviceEndpoint": "http://myaquarius.org/api/v1/provider/assets/metadata/{did}",
+            "serviceEndpoint": "http://mymetadata.org/api/v1/metadata/assets/metadata/{did}",
             "attributes": {
                 "main": {
                     "name": "UK Weather information 2011",
@@ -723,19 +723,19 @@ json_update = {
         {
             "type": "Consume",
             "index": 0,
-            "serviceEndpoint": "http://mybrizo.org/api/v1/brizo/services/consume?pubKey=${"
+            "serviceEndpoint": "http://mygateway.org/api/v1/gateway/services/consume?pubKey=${"
                                "pubKey}&serviceId={serviceId}&url={url}"
         },
         {
             "type": "Compute",
             "index": 1,
-            "serviceEndpoint": "http://mybrizo.org/api/v1/brizo/services/compute?pubKey=${"
+            "serviceEndpoint": "http://mygateway.org/api/v1/gateway/services/compute?pubKey=${"
                                "pubKey}&serviceId={serviceId}&algo={algo}&container={container}"
         },
         {
             "type": "metadata",
             "index": 2,
-            "serviceEndpoint": "http://myaquarius.org/api/v1/provider/assets/metadata/{did}",
+            "serviceEndpoint": "http://mymetadata.org/api/v1/provider/assets/metadata/{did}",
             "attributes": {
                 "main": {
                     "name": "UK Weather information 2012",

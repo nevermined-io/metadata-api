@@ -35,10 +35,10 @@ ENV DB_INDEX='nevermind_metadata'
 ENV DB_SECRET=''
 ENV DB_SCHEME='http'
 ENV DB_NAMESPACE='namespace'
-ENV AQUARIUS_URL='http://0.0.0.0:5000'
+ENV METADATA_URL='http://0.0.0.0:5000'
 ENV ALLOW_FREE_ASSETS_ONLY='false'
 # docker-entrypoint.sh configuration file variables
-ENV AQUARIUS_WORKERS='1'
+ENV METADATA_WORKERS='1'
 
 ENTRYPOINT ["/nevermind_metadata/docker-entrypoint.sh"]
 

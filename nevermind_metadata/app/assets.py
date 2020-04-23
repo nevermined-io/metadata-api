@@ -21,7 +21,7 @@ assets = Blueprint('assets', __name__)
 
 # Prepare OceanDB
 dao = Dao(config_file=app.config['CONFIG_FILE'])
-logger = logging.getLogger('aquarius')
+logger = logging.getLogger('metadata')
 
 
 @assets.route('', methods=['GET'])
@@ -165,15 +165,15 @@ def register():
                             {"type": "access",
                              "index": 1,
                              "serviceEndpoint":
-                             "http://localhost:8030/api/v1/brizo/services/consume",
+                             "http://localhost:8030/api/v1/gateway/services/consume",
                              "purchaseEndpoint":
-                             "http://localhost:8030/api/v1/brizo/services/access/initialize"
+                             "http://localhost:8030/api/v1/gateway/services/access/initialize"
                              },
                            {
                             "type": "metadata",
                             "index": 2,
                             "serviceEndpoint":
-                            "http://myaquarius.org/api/v1/provider/assets/metadata/did:op
+                            "http://mymetadata.org/api/v1/provider/assets/metadata/did:op
                             :0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
                             "attributes": {
                                 "main": {
@@ -346,9 +346,9 @@ def update(did):
                   example: [{"type": "access",
                              "index": 1,
                              "serviceEndpoint":
-                             "http://localhost:8030/api/v1/brizo/services/consume",
+                             "http://localhost:8030/api/v1/gateway/services/consume",
                              "purchaseEndpoint":
-                             "http://localhost:8030/api/v1/brizo/services/access/initialize"},
+                             "http://localhost:8030/api/v1/gateway/services/access/initialize"},
                             {"type": "authorization",
                               "serviceEndpoint": "http://localhost:12001",
                               "service": "SecretStore",
@@ -358,7 +358,7 @@ def update(did):
                             "type": "metadata",
                             "index": 2,
                             "serviceEndpoint":
-                            "http://myaquarius.org/api/v1/provider/assets/metadata/did:op
+                            "http://mymetadata.org/api/v1/provider/assets/metadata/did:op
                             :0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
                             "attributes": {
                                 "main": {

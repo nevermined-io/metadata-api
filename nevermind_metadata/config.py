@@ -7,21 +7,21 @@ import os
 
 from nevermind_metadata.constants import ConfigSections
 
-DEFAULT_NAME_AQUARIUS_URL = 'http://localhost:5000'
+DEFAULT_NAME_METADATA_URL = 'http://localhost:5000'
 
-NAME_AQUARIUS_URL = 'aquarius.url'
+NAME_METADATA_URL = 'metadata.url'
 ALLOW_FREE_ASSETS_ONLY = 'allowFreeAssetsOnly'
 MODULE = 'module'
 DB_HOSTNAME = 'db.hostname'
 DB_PORT = 'db.port'
 
 environ_names = {
-    NAME_AQUARIUS_URL: ['AQUARIUS_URL', 'Aquarius URL'],
+    NAME_METADATA_URL: ['METADATA_URL', 'Metadata URL'],
 }
 
 config_defaults = {
     ConfigSections.RESOURCES: {
-        NAME_AQUARIUS_URL: DEFAULT_NAME_AQUARIUS_URL,
+        NAME_METADATA_URL: DEFAULT_NAME_METADATA_URL,
     }
 }
 
@@ -61,8 +61,8 @@ class Config(configparser.ConfigParser):
                 self.set(self._section_name, name, value)
 
     @property
-    def aquarius_url(self):
-        return self.get(self._section_name, NAME_AQUARIUS_URL)
+    def metadata_url(self):
+        return self.get(self._section_name, NAME_METADATA_URL)
 
     @property
     def allow_free_assets_only(self):

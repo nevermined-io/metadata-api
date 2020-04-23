@@ -15,7 +15,7 @@ from nevermind_metadata.constants import BaseURLs, Metadata
 from nevermind_metadata.myapp import app
 
 config = Config(filename=app.config['CONFIG_FILE'])
-aquarius_url = config.aquarius_url
+metadata_url = config.metadata_url
 
 
 def get_version():
@@ -43,7 +43,7 @@ def spec():
     swag = swagger(app)
     swag['info']['version'] = get_version()
     swag['info']['title'] = Metadata.TITLE
-    swag['info']['description'] = Metadata.DESCRIPTION + '`' + aquarius_url + '`.'
+    swag['info']['description'] = Metadata.DESCRIPTION + '`' + metadata_url + '`.'
     swag['info']['connected'] = get_status()
     # swag['basePath'] = BaseURLs.BASE_AQUARIUS_URL
     return jsonify(swag)
@@ -52,7 +52,7 @@ def spec():
 # Call factory function to create our blueprint
 swaggerui_blueprint = get_swaggerui_blueprint(
     BaseURLs.SWAGGER_URL,
-    aquarius_url + '/spec',
+    metadata_url + '/spec',
     config={  # Swagger UI config overrides
         'app_name': "Test application"
     },
@@ -80,8 +80,8 @@ def get_status():
 
 
 if __name__ == '__main__':
-    if isinstance(config.aquarius_url.split(':')[-1], int):
-        app.run(host=config.aquarius_url.split(':')[1],
-                port=config.aquarius_url.split(':')[-1])
+    if isinstance(config.metadata_url.split(':')[-1], int):
+        app.run(host=config.metadata_url.split(':')[1],
+                port=config.metadata_url.split(':')[-1])
     else:
         app.run()
