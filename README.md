@@ -1,6 +1,6 @@
 [![banner](https://raw.githubusercontent.com/keyko-io/assets/master/images/logo/small/keyko_logo@2x-100.jpg)](https://keyko.io)
 
-# nevermind-metadata
+# Nevermind Metadata API
 
 > Nevermind metadata provides an off-chain database store for metadata about data assets.
 
@@ -114,12 +114,16 @@ Our tests use the pytest framework.
 
 The `bumpversion.sh` script helps bump the project version. You can execute the script using `{major|minor|patch}` as first argument, to bump the version accordingly.
 
-##Attribution
+## Attribution
+
 This project is based in the [Ocean Protocol Aquarius](https://github.com/oceanprotocol/aquarius). It keeps the same Apache v2 License and adds some improvements.
+See [NOTICE file](NOTICE).
 
 ## License
 ```
-Copyright 2020 Keyko GmbH.
+Copyright 2020 Keyko GmbH
+This product includes software developed at
+BigchainDB GmbH and Ocean Protocol (https://www.oceanprotocol.com/)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
