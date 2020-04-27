@@ -126,7 +126,7 @@ def register():
               type: string
             id:
               description: ID of the asset.
-              example: did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e429
+              example: did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e429
               type: string
             created:
               description: date of ddo creation.
@@ -136,7 +136,7 @@ def register():
                   type: array
                   description: List of public keys.
                   example: [{"id":
-                  "did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
+                  "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
                             "type": "EthereumECDSAKey",
                             "owner": "0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e"}]
             authentication:
@@ -144,7 +144,7 @@ def register():
                   description: List of authentication mechanisms.
                   example: [{"type": "RsaSignatureAuthentication2018",
                             "publicKey":
-                            "did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"}]
+                            "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"}]
             proof:
                   type: dictionary
                   description: Information about the creation and creator of the asset.
@@ -173,7 +173,7 @@ def register():
                             "type": "metadata",
                             "index": 2,
                             "serviceEndpoint":
-                            "http://mymetadata.org/api/v1/provider/assets/metadata/did:op
+                            "http://mymetadata.org/api/v1/provider/assets/metadata/did:nv
                             :0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
                             "attributes": {
                                 "main": {
@@ -312,7 +312,7 @@ def update(did):
               type: string
             id:
               description: ID of the asset.
-              example: did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e429
+              example: did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e429
               type: string
             created:
               description: date of ddo creation.
@@ -322,7 +322,7 @@ def update(did):
                   type: array
                   description: List of public keys.
                   example: [{"id":
-                  "did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
+                  "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
                             "type": "EthereumECDSAKey",
                             "owner": "0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e"}]
             authentication:
@@ -330,7 +330,7 @@ def update(did):
                   description: List of authentication mechanisms.
                   example: [{"type": "RsaSignatureAuthentication2018",
                             "publicKey":
-                            "did:op:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"}]
+                            "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"}]
             proof:
                   type: dictionary
                   description: Information about the creation and creator of the asset.
@@ -358,7 +358,7 @@ def update(did):
                             "type": "metadata",
                             "index": 2,
                             "serviceEndpoint":
-                            "http://mymetadata.org/api/v1/provider/assets/metadata/did:op
+                            "http://mymetadata.org/api/v1/provider/assets/metadata/did:nv
                             :0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
                             "attributes": {
                                 "main": {
