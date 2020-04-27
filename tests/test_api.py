@@ -101,7 +101,7 @@ def test_query_metadata(client, base_ddo_url):
     assert len(json.loads(client.get(base_ddo_url + '/query?text=Office',
                                      ).data.decode('utf-8'))['results']) == 1
     assert len(json.loads(
-        client.get(base_ddo_url + '/query?text=112233445566778899',
+        client.get(base_ddo_url + '/query?text=0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e431',
                    ).data.decode('utf-8'))['results']) == 1
     try:
         num_assets = len(test_assets) + 2
