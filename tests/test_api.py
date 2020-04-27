@@ -30,7 +30,7 @@ def test_create_ddo(client, base_ddo_url):
         content_type='application/json')
     assert json_dict['id'] in json.loads(rv.data.decode('utf-8'))['id']
     assert json_dict['@context'] in json.loads(rv.data.decode('utf-8'))['@context']
-    assert json_dict['service'][2]['type'] in json.loads(rv.data.decode('utf-8'))['service'][0][
+    assert json_dict['service'][0]['type'] in json.loads(rv.data.decode('utf-8'))['service'][0][
         'type']
 
 
@@ -45,7 +45,7 @@ def test_upsert_ddo(client_with_no_data, base_ddo_url):
     assert 201 == put.status_code
     assert json_dict['id'] in json.loads(rv.data.decode('utf-8'))['id']
     assert json_dict['@context'] in json.loads(rv.data.decode('utf-8'))['@context']
-    assert json_dict['service'][2]['type'] in json.loads(rv.data.decode('utf-8'))['service'][0][
+    assert json_dict['service'][0]['type'] in json.loads(rv.data.decode('utf-8'))['service'][0][
         'type']
     client_with_no_data.delete(
         base_ddo_url + '/%s' % json.loads(put.data.decode('utf-8'))['id'])
@@ -101,8 +101,10 @@ def test_query_metadata(client, base_ddo_url):
     assert len(json.loads(client.get(base_ddo_url + '/query?text=Office',
                                      ).data.decode('utf-8'))['results']) == 1
     assert len(json.loads(
-        client.get(base_ddo_url + '/query?text=0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e431',
-                   ).data.decode('utf-8'))['results']) == 1
+        client.get(
+            base_ddo_url +
+            '/query?text=0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e431',
+            ).data.decode('utf-8'))['results']) == 1
     try:
         num_assets = len(test_assets) + 2
         for a in test_assets:
@@ -111,7 +113,7 @@ def test_query_metadata(client, base_ddo_url):
                         content_type='application/json')
 
         response = json.loads(
-            client.get(base_ddo_url + '/query?text=white&page=1&offset=5', )
+            client.get(base_ddo_url + '/query?text=Met&page=1&offset=5', )
                 .data.decode('utf-8')
         )
         assert response['page'] == 1
@@ -120,7 +122,7 @@ def test_query_metadata(client, base_ddo_url):
         assert len(response['results']) == 5
 
         response = json.loads(
-            client.get(base_ddo_url + '/query?text=white&page=3&offset=5', )
+            client.get(base_ddo_url + '/query?text=Met&page=3&offset=5', )
                 .data.decode('utf-8')
         )
         assert response['page'] == 3
@@ -129,7 +131,7 @@ def test_query_metadata(client, base_ddo_url):
         assert len(response['results']) == num_assets - (5 * (response['total_pages'] - 1))
 
         response = json.loads(
-            client.get(base_ddo_url + '/query?text=white&page=4&offset=5', )
+            client.get(base_ddo_url + '/query?text=Met&page=4&offset=5', )
                 .data.decode('utf-8')
         )
         assert response['page'] == 4
