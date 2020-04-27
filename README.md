@@ -5,7 +5,7 @@
 > Nevermind metadata provides an off-chain database store for metadata about data assets.
 
 ![Nevermind metadata](https://github.com/keyko-io/nevermind-metadata/workflows/Python%20package/badge.svg)
-[![Docker Build Status](https://img.shields.io/docker/build/keykoio/nevermind-metadata.svg)](https://hub.docker.com/r/keykoio/nevermind-metadata/) 
+[![Docker Build Status](https://img.shields.io/docker/cloud/build/keykoio/nevermind-metadata.svg)](https://hub.docker.com/r/keykoio/nevermind-metadata/) 
 [![GitHub contributors](https://img.shields.io/github/contributors/keyko-io/nevermind-metadata.svg)](https://github.com/keyko-io/nevermind-metadata/graphs/contributors)
 
 ## For Metadata Operators
