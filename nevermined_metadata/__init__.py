@@ -1,6 +1,2 @@
-"""Provide an off-chain database store for data asset metadata and registration."""
-#  Copyright 2018 Ocean Protocol Foundation
-#  SPDX-License-Identifier: Apache-2.0
-
-__author__ = """OceanProtocol"""
+__author__ = """Nevermined"""
 __version__ = '0.1.0'
