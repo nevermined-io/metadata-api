@@ -1,13 +1,11 @@
-#  Copyright 2018 Ocean Protocol Foundation
-#  SPDX-License-Identifier: Apache-2.0
 import copy
 import json
 from urllib.request import urlopen
 
 import pytest
 
-from nevermind_metadata.constants import BaseURLs
-from nevermind_metadata.run import app
+from nevermined_metadata.constants import BaseURLs
+from nevermined_metadata.run import app
 
 app = app
 
@@ -44,10 +42,10 @@ def client():
 
 
 json_dict = json.loads(urlopen(
-    "https://raw.githubusercontent.com/keyko-io/nevermind-docs/master/architecture/specs/examples/access/v0.1/ddo1.json").read().decode('utf-8'))
+    "https://raw.githubusercontent.com/keyko-io/nevermined-docs/master/architecture/specs/examples/access/v0.1/ddo1.json").read().decode('utf-8'))
 
 json_dict2 = json.loads(urlopen(
-    "https://raw.githubusercontent.com/keyko-io/nevermind-docs/master/architecture/specs/examples/access/v0.1/ddo1-upsert.json").read().decode('utf-8'))
+    "https://raw.githubusercontent.com/keyko-io/nevermined-docs/master/architecture/specs/examples/access/v0.1/ddo1-upsert.json").read().decode('utf-8'))
 json_dict_no_metadata = {"publisherId": "0x2"}
 json_dict_no_valid_metadata = {"publisherId": "0x4",
                                "main": {},
@@ -55,12 +53,12 @@ json_dict_no_valid_metadata = {"publisherId": "0x4",
                                }
 
 json_before = json.loads(urlopen(
-    "https://raw.githubusercontent.com/keyko-io/nevermind-docs/master/architecture/specs/examples/access/v0.1/ddo2.json").read().decode('utf-8'))
+    "https://raw.githubusercontent.com/keyko-io/nevermined-docs/master/architecture/specs/examples/access/v0.1/ddo2.json").read().decode('utf-8'))
 json_update = json.loads(urlopen(
-    "https://raw.githubusercontent.com/keyko-io/nevermind-docs/master/architecture/specs/examples/access/v0.1/ddo2-update.json").read().decode('utf-8'))
+    "https://raw.githubusercontent.com/keyko-io/nevermined-docs/master/architecture/specs/examples/access/v0.1/ddo2-update.json").read().decode('utf-8'))
 
 json_valid = json.loads(urlopen(
-    "https://raw.githubusercontent.com/keyko-io/nevermind-docs/master/architecture/specs/examples/metadata/v0.1/metadata1.json").read().decode('utf-8'))
+    "https://raw.githubusercontent.com/keyko-io/nevermined-docs/master/architecture/specs/examples/metadata/v0.1/metadata1.json").read().decode('utf-8'))
 
 test_assets = []
 for i in range(10):

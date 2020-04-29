@@ -1,11 +1,8 @@
-#  Copyright 2018 Ocean Protocol Foundation
-#  SPDX-License-Identifier: Apache-2.0
-
 import configparser
 import logging
 import os
 
-from nevermind_metadata.constants import ConfigSections
+from nevermined_metadata.constants import ConfigSections
 
 DEFAULT_NAME_METADATA_URL = 'http://localhost:5000'
 

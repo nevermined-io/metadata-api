@@ -1,6 +1,3 @@
-#  Copyright 2018 Ocean Protocol Foundation
-#  SPDX-License-Identifier: Apache-2.0
-
 import configparser
 
 from elasticsearch import Elasticsearch
@@ -9,10 +6,10 @@ from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
 from pymongo import MongoClient
 
-from nevermind_metadata.app.assets import assets
-from nevermind_metadata.config import Config
-from nevermind_metadata.constants import BaseURLs, Metadata
-from nevermind_metadata.myapp import app
+from nevermined_metadata.app.assets import assets
+from nevermined_metadata.config import Config
+from nevermined_metadata.constants import BaseURLs, Metadata
+from nevermined_metadata.myapp import app
 
 config = Config(filename=app.config['CONFIG_FILE'])
 metadata_url = config.metadata_url
