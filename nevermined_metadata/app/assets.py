@@ -11,10 +11,10 @@ from oceandb_driver_interface.search_model import FullTextModel, QueryModel
 from plecos.plecos import (is_valid_dict_local, is_valid_dict_remote, list_errors_dict_local,
                            list_errors_dict_remote)
 
-from nevermind_metadata.app.dao import Dao
-from nevermind_metadata.config import Config
-from nevermind_metadata.log import setup_logging
-from nevermind_metadata.myapp import app
+from nevermined_metadata.app.dao import Dao
+from nevermined_metadata.config import Config
+from nevermined_metadata.log import setup_logging
+from nevermined_metadata.myapp import app
 
 setup_logging()
 assets = Blueprint('assets', __name__)

@@ -13,7 +13,7 @@ class BaseURLs:
 
 
 class Metadata:
-    TITLE = 'Nevermind metadata'
-    DESCRIPTION = 'Nevermind metadata provides an off-chain database store for metadata about ' \
+    TITLE = 'Nevermined metadata'
+    DESCRIPTION = 'Nevermined metadata provides an off-chain database store for metadata about ' \
                   'data assets. ' \
                   'When running with our Docker images, it is exposed under:'

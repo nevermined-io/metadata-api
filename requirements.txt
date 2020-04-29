@@ -1,12 +1,12 @@
-# pip install nevermind-metadata
+# pip install nevermined-metadata
 # is for end users. That will install the packages
 # listed in the install_requires list of setup.py.
 
 # pip install -r requirements.txt
-# is for Nevermind Metadata developers, so doing that should
+# is for Nevermined Metadata developers, so doing that should
 # install all the Python packages listed
 # in the install_requires list of setup.py
 # and also the 'dev' list in the extras_require dict
-# (i.e. the packages needed by Nevermind Metadata developers)
+# (i.e. the packages needed by Nevermined Metadata developers)
 
 -e .[dev]

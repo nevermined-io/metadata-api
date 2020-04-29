@@ -16,8 +16,8 @@ RUN apk add --no-cache --update\
     python3-dev \
   && pip install virtualenv
 
-COPY . /nevermind_metadata
-WORKDIR /nevermind_metadata
+COPY . /nevermined_metadata
+WORKDIR /nevermined_metadata
 
 # Only install install_requirements, not dev_ or test_requirements
 RUN pip install .
@@ -27,10 +27,10 @@ ENV DB_MODULE='mongodb'
 ENV DB_HOSTNAME='localhost'
 ENV DB_PORT='27017'
 #MONGO
-ENV DB_NAME='nevermind_metadata'
+ENV DB_NAME='nevermined_metadata'
 ENV DB_COLLECTION='ddo'
 #ELASTIC
-ENV DB_INDEX='nevermind_metadata'
+ENV DB_INDEX='nevermined_metadata'
 #BDB
 ENV DB_SECRET=''
 ENV DB_SCHEME='http'
@@ -40,6 +40,6 @@ ENV ALLOW_FREE_ASSETS_ONLY='false'
 # docker-entrypoint.sh configuration file variables
 ENV METADATA_WORKERS='1'
 
-ENTRYPOINT ["/nevermind_metadata/docker-entrypoint.sh"]
+ENTRYPOINT ["/nevermined_metadata/docker-entrypoint.sh"]
 
 EXPOSE 5000
