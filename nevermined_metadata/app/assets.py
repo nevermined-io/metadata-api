@@ -23,13 +23,9 @@ logger = logging.getLogger('metadata')
 
 @assets.route('', methods=['GET'])
 def get_assets():
-    """Get all asset IDs.
-    ---
-    tags:
-      - ddo
-    responses:
-      200:
-        description: successful action
+    """
+    Get all asset IDs.
+    swagger_from_file: docs/get_assets.yml
     """
     args = []
     query = dict()
@@ -43,20 +39,7 @@ def get_assets():
 @assets.route('/ddo/<did>', methods=['GET'])
 def get_ddo(did):
     """Get DDO of a particular asset.
-    ---
-    tags:
-      - ddo
-    parameters:
-      - name: did
-        in: path
-        description: DID of the asset.
-        required: true
-        type: string
-    responses:
-      200:
-        description: successful operation
-      404:
-        description: This asset DID is not in OceanDB
+    swagger_from_file: docs/get_ddo.yml
     """
     try:
         asset_record = dao.get(did)
@@ -69,20 +52,7 @@ def get_ddo(did):
 @assets.route('/metadata/<did>', methods=['GET'])
 def get_metadata(did):
     """Get metadata of a particular asset
-    ---
-    tags:
-      - metadata
-    parameters:
-      - name: did
-        in: path
-        description: DID of the asset.
-        required: true
-        type: string
-    responses:
-      200:
-        description: successful operation.
-      404:
-        description: This asset DID is not in OceanDB.
+    swagger_from_file: docs/get_metadata.yml
     """
     try:
         asset_record = dao.get(did)
@@ -96,134 +66,7 @@ def get_metadata(did):
 @assets.route('/ddo', methods=['POST'])
 def register():
     """Register DDO of a new asset
-    ---
-    tags:
-      - ddo
-    consumes:
-      - application/json
-    parameters:
-      - in: body
-        name: body
-        required: true
-        description: DDO of the asset.
-        schema:
-          type: object
-          required:
-            - "@context"
-            - id
-            - created
-            - publicKey
-            - authentication
-            - proof
-            - service
-          properties:
-            "@context":
-              description:
-              example: https://w3id.org/did/v1
-              type: string
-            id:
-              description: ID of the asset.
-              example: did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e429
-              type: string
-            created:
-              description: date of ddo creation.
-              example: "2016-02-08T16:02:20Z"
-              type: string
-            publicKey:
-                  type: array
-                  description: List of public keys.
-                  example: [{"id":
-                  "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
-                            "type": "EthereumECDSAKey",
-                            "owner": "0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e"}]
-            authentication:
-                  type: array
-                  description: List of authentication mechanisms.
-                  example: [{"type": "RsaSignatureAuthentication2018",
-                            "publicKey":
-                            "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"}]
-            proof:
-                  type: dictionary
-                  description: Information about the creation and creator of the asset.
-                  example:  {"type": "DDOIntegritySignature",
-                             "created": "2016-02-08T16:02:20Z",
-                             "creator": "0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e",
-                             "signatureValue":
-                             "0xbd7b46b3ac664167bc70ac211b1a1da0baed9ead91613a5f02dfc25c1bb6e3ff40861b455017e8a587fd4e37b703436072598c3a81ec88be28bfe33b61554a471b"
-                            }
-            service:
-                  type: array
-                  description: List of services.
-                  example: [{"type": "authorization",
-                              "serviceEndpoint": "http://localhost:12001",
-                              "service": "SecretStore",
-                              "index": 0
-                            },
-                            {"type": "access",
-                             "index": 1,
-                             "serviceEndpoint":
-                             "http://localhost:8030/api/v1/gateway/services/consume",
-                             "purchaseEndpoint":
-                             "http://localhost:8030/api/v1/gateway/services/access/initialize"
-                             },
-                           {
-                            "type": "metadata",
-                            "index": 2,
-                            "serviceEndpoint":
-                            "http://mymetadata.org/api/v1/provider/assets/metadata/did:nv
-                            :0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
-                            "attributes": {
-                                "main": {
-                                    "name": "UK Weather information 2011",
-                                    "type": "dataset",
-                                    "dateCreated": "2012-02-01T10:55:11Z",
-                                    "author": "Met Office",
-                                    "license": "CC-BY",
-                                    "files": [{
-                                            "contentLength": "4535431",
-                                            "contentType": "text/csv",
-                                            "encoding": "UTF-8",
-                                            "compression": "zip",
-                                            "index" :0,
-                                            "resourceId":
-                                            "access-log2018-02-13-15-17-29-18386C502CAEA932"
-                                    }
-                                    ],
-                                    "encryptedFiles": "0x098213xzckasdf089723hjgdasfkjgasfv",
-                                    "price": "10"
-                                },
-                                "curation": {
-                                    "rating": 0.93,
-                                    "numVotes": 123,
-                                    "schema": "Binary Voting"
-                                },
-                                "additionalInformation": {
-                                    "description": "Weather information of UK including
-                                    temperature and humidity",
-                                    "copyrightHolder": "Met Office",
-                                    "workExample": "stationId,latitude,longitude,datetime,
-                                    temperature,humidity/n423432fsd,51.509865,-0.118092,
-                                    2011-01-01T10:55:11+00:00,7.2,68",
-                                    "inLanguage": "en",
-                                    "links": [{
-                                            "name": "Sample of Asset Data",
-                                            "type": "sample",
-                                            "url": "https://foo.com/sample.csv"
-                                        }
-                                    ],
-                                    "tags": ["weather", "uk", "2011", "temperature", "humidity"]
-                                }
-                            }
-                        }]
-    responses:
-      201:
-        description: Asset successfully registered.
-      400:
-        description: One of the required attributes is missing.
-      404:
-        description: Invalid asset data.
-      500:
-        description: Error
+    swagger_from_file: docs/register.yml
     """
     assert isinstance(request.json, dict), 'invalid payload format.'
     required_attributes = ['@context', 'created', 'id', 'publicKey', 'authentication', 'proof',
@@ -277,140 +120,7 @@ def register():
 @assets.route('/ddo/<did>', methods=['PUT'])
 def update(did):
     """Update DDO of an existing asset
-    ---
-    tags:
-      - ddo
-    consumes:
-      - application/json
-    parameters:
-      - name: did
-        in: path
-        description: DID of the asset.
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: DDO of the asset.
-        schema:
-          type: object
-          required:
-            - "@context"
-            - created
-            - id
-            - publicKey
-            - authentication
-            - proof
-            - service
-          properties:
-            "@context":
-              description:
-              example: https://w3id.org/did/v1
-              type: string
-            id:
-              description: ID of the asset.
-              example: did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e429
-              type: string
-            created:
-              description: date of ddo creation.
-              example: "2016-02-08T16:02:20Z"
-              type: string
-            publicKey:
-                  type: array
-                  description: List of public keys.
-                  example: [{"id":
-                  "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
-                            "type": "EthereumECDSAKey",
-                            "owner": "0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e"}]
-            authentication:
-                  type: array
-                  description: List of authentication mechanisms.
-                  example: [{"type": "RsaSignatureAuthentication2018",
-                            "publicKey":
-                            "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"}]
-            proof:
-                  type: dictionary
-                  description: Information about the creation and creator of the asset.
-                  example:  {"type": "DDOIntegritySignature",
-                             "created": "2016-02-08T16:02:20Z",
-                             "creator": "0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e",
-                             "signatureValue":
-                             "0xbd7b46b3ac664167bc70ac211b1a1da0baed9ead91613a5f02dfc25c1bb6e3ff40861b455017e8a587fd4e37b703436072598c3a81ec88be28bfe33b61554a471b"
-                            }
-            service:
-                  type: array
-                  description: List of services.
-                  example: [{"type": "access",
-                             "index": 1,
-                             "serviceEndpoint":
-                             "http://localhost:8030/api/v1/gateway/services/consume",
-                             "purchaseEndpoint":
-                             "http://localhost:8030/api/v1/gateway/services/access/initialize"},
-                            {"type": "authorization",
-                              "serviceEndpoint": "http://localhost:12001",
-                              "service": "SecretStore",
-                              "index": 0
-                            },
-                           {
-                            "type": "metadata",
-                            "index": 2,
-                            "serviceEndpoint":
-                            "http://mymetadata.org/api/v1/provider/assets/metadata/did:nv
-                            :0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430",
-                            "attributes": {
-                                "main": {
-                                    "name": "UK Weather information 2011",
-                                    "type": "dataset",
-                                    "dateCreated": "2012-02-01T10:55:11Z",
-                                    "author": "Met Office",
-                                    "license": "CC-BY",
-                                    "files": [{
-                                            "contentLength": "4535431",
-                                            "contentType": "text/csv",
-                                            "encoding": "UTF-8",
-                                            "compression": "zip",
-                                            "index" :0,
-                                            "resourceId":
-                                            "access-log2018-02-13-15-17-29-18386C502CAEA932"
-                                    }
-                                    ],
-                                    "encryptedFiles": "0x098213xzckasdf089723hjgdasfkjgasfv",
-                                    "price": "10"
-                                },
-                                "curation": {
-                                    "rating": 0.93,
-                                    "numVotes": 123,
-                                    "schema": "Binary Voting"
-                                },
-                                "additionalInformation": {
-                                    "description": "Weather information of UK including
-                                    temperature and humidity",
-                                    "links": [{
-                                            "name": "Sample of Asset Data",
-                                            "type": "sample",
-                                            "url": "https://foo.com/sample.csv"
-                                        }
-                                    ],
-                                    "workExample": "stationId,latitude,longitude,datetime,
-                                    temperature,humidity/n423432fsd,51.509865,-0.118092,
-                                    2011-01-01T10:55:11+00:00,7.2,68",
-                                    "inLanguage": "en",
-                                    "copyrightHolder": "Met Office",
-                                    "tags": ["weather", "uk", "2011", "temperature", "humidity"]
-                                }
-                            }
-                        }]
-    responses:
-      200:
-        description: Asset successfully updated.
-      201:
-        description: Asset successfully registered.
-      400:
-        description: One of the required attributes is missing.
-      404:
-        description: Invalid asset data.
-      500:
-        description: Error
+    swagger_from_file: docs/update.yml
     """
     required_attributes = ['@context', 'created', 'id', 'publicKey', 'authentication', 'proof',
                            'service']
@@ -457,22 +167,7 @@ def update(did):
 @assets.route('/ddo/<did>', methods=['DELETE'])
 def retire(did):
     """Retire metadata of an asset
-    ---
-    tags:
-      - ddo
-    parameters:
-      - name: did
-        in: path
-        description: DID of the asset.
-        required: true
-        type: string
-    responses:
-      200:
-        description: successfully deleted
-      404:
-        description: This asset DID is not in OceanDB
-      500:
-        description: Error
+    swagger_from_file: docs/retire.yml
     """
     try:
         if dao.get(did) is None:
@@ -487,12 +182,7 @@ def retire(did):
 @assets.route('/ddo', methods=['GET'])
 def get_asset_ddos():
     """Get DDO of all assets.
-    ---
-    tags:
-      - ddo
-    responses:
-      200:
-        description: successful action
+    swagger_from_file: docs/get_asset_ddos.yml
     """
     args = []
     query = dict()
@@ -508,33 +198,7 @@ def get_asset_ddos():
 @assets.route('/ddo/query', methods=['GET'])
 def query_text():
     """Get a list of DDOs that match with the given text.
-    ---
-    tags:
-      - ddo
-    parameters:
-      - name: text
-        in: query
-        description: ID of the asset.
-        required: true
-        type: string
-      - name: sort
-        in: query
-        type: object
-        description: Key or list of keys to sort the result
-        example: {"value":1}
-      - name: offset
-        in: query
-        type: int
-        description: Number of records per page
-        example: 100
-      - name: page
-        in: query
-        type: int
-        description: Page showed
-        example: 1
-    responses:
-      200:
-        description: successful action
+     swagger_from_file: docs/query_text.yml
     """
     data = request.args
     assert isinstance(data, dict), 'invalid `args` type, should already formatted into a dict.'
@@ -554,38 +218,7 @@ def query_text():
 @assets.route('/ddo/query', methods=['POST'])
 def query_ddo():
     """Get a list of DDOs that match with the executed query.
-    ---
-    tags:
-      - ddo
-    consumes:
-      - application/json
-    parameters:
-      - in: body
-        name: body
-        required: true
-        description: Asset metadata.
-        schema:
-          type: object
-          properties:
-            query:
-              type: string
-              description: Query to realize
-              example: {"value":1}
-            sort:
-              type: object
-              description: Key or list of keys to sort the result
-              example: {"value":1}
-            offset:
-              type: int
-              description: Number of records per page
-              example: 100
-            page:
-              type: int
-              description: Page showed
-              example: 1
-    responses:
-      200:
-        description: successful action
+     swagger_from_file: docs/query_ddo.yml
     """
     assert isinstance(request.json, dict), 'invalid payload format.'
     data = request.json
@@ -609,14 +242,7 @@ def query_ddo():
 @assets.route('/ddo', methods=['DELETE'])
 def retire_all():
     """Retire metadata of all the assets.
-    ---
-    tags:
-      - ddo
-    responses:
-      200:
-        description: successfully deleted
-      500:
-        description: Error
+     swagger_from_file: docs/retire_all.yml
     """
     try:
         all_ids = [a['id'] for a in dao.get_all_assets()]
@@ -631,23 +257,7 @@ def retire_all():
 @assets.route('/ddo/validate', methods=['POST'])
 def validate():
     """Validate metadata content.
-    ---
-    tags:
-      - ddo
-    consumes:
-      - application/json
-    parameters:
-      - in: body
-        name: body
-        required: true
-        description: Asset metadata.
-        schema:
-          type: object
-    responses:
-      200:
-        description: successfully request.
-      500:
-        description: Error
+     swagger_from_file: docs/validate.yml
     """
     assert isinstance(request.json, dict), 'invalid payload format.'
     data = request.json

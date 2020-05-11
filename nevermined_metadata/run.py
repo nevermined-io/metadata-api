@@ -37,7 +37,7 @@ def health():
 
 @app.route("/spec")
 def spec():
-    swag = swagger(app)
+    swag = swagger(app, from_file_keyword='swagger_from_file')
     swag['info']['version'] = get_version()
     swag['info']['title'] = Metadata.TITLE
     swag['info']['description'] = Metadata.DESCRIPTION + '`' + metadata_url + '`.'
