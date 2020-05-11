@@ -13,12 +13,12 @@ with open('CHANGELOG.md') as history_file:
 
 install_requirements = [
     'coloredlogs==10.0',
-    'Flask==1.0.2',
-    'Flask-Cors==3.0.6',
+    'Flask==1.1.2',
+    'Flask-Cors==3.0.8',
     'flask-swagger==0.2.14',
-    'flask-swagger-ui==3.20.9',
+    'flask-swagger-ui==3.25.0',
     'Jinja2>=2.10.1',
-    'requests>=2.21.0',
+    'requests>=2.23.0',
     'gunicorn==19.9.0',
     'oceandb-driver-interface==0.2.0',
     'oceandb-mongodb-driver==0.2.0',
