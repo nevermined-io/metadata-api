@@ -48,8 +48,8 @@ test_requirements = [
 ]
 
 setup(
-    author="keyko-io",
-    author_email='root@keyko.io',
+    author="nevermined-io",
+    author_email='root@nevermined.io',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
@@ -74,7 +74,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/keyko-io/nevermined-metadata',
+    url='https://github.com/nevermined-io/metadata-api',
     version='0.2.0',
     zip_safe=False,
 )

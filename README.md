@@ -1,17 +1,16 @@
-[![banner](https://raw.githubusercontent.com/keyko-io/assets/master/images/logo/nevermined_logo_1.png)](https://nevermined.io)
-
+[![banner](https://raw.githubusercontent.com/nevermined-io/assets/main/images/logo/banner_logo.png)](https://nevermined.io)
 
 # Nevermined Metadata API
 
 > Nevermined metadata provides an off-chain database store for metadata about data assets.
 
-![Nevermined metadata](https://github.com/keyko-io/nevermined-metadata/workflows/Python%20package/badge.svg)
-[![Docker Build Status](https://img.shields.io/docker/cloud/build/keykoio/nevermined-metadata.svg)](https://hub.docker.com/r/keykoio/nevermined-metadata/) 
-[![GitHub contributors](https://img.shields.io/github/contributors/keyko-io/nevermined-metadata.svg)](https://github.com/keyko-io/nevermined-metadata/graphs/contributors)
+![Nevermined metadata](https://github.com/nevermined-io/metadata-api/workflows/Python%20package/badge.svg)
+[![Docker Build Status](https://img.shields.io/docker/cloud/build/keykoio/nevermined-metadata.svg)](https://hub.docker.com/r/keykoio/nevermined-metadata/)
+[![GitHub contributors](https://img.shields.io/github/contributors/nevermined-io/metadata-api.svg)](https://github.com/nevermined-io/metadata-api/graphs/contributors)
 
 ## For Metadata Operators
 
-If you're developing a marketplace, you'll want to run Nevermined Metadata and several other components locally, and the easiest way to do that is to use Nevermined tools. See the instructions in [Nevemind tools repository](https://github.com/keyko-io/nevermined-tools).
+If you're developing a marketplace, you'll want to run Nevermined Metadata and several other components locally, and the easiest way to do that is to use Nevermined tools. See the instructions in [Nevemind tools repository](https://github.com/nevermined-io/tools).
 
 ## For Metadata API Users
 
@@ -24,21 +23,21 @@ Tip 1: If that doesn't work, then try `https`.
 Tip 2: If your browser shows the Swagger header across the top but says "Failed to load spec." then we found that, in Chrome, if we went to `chrome://flags/#allow-insecure-localhost` and toggled it to Enabled, then relaunched Chrome, it worked.
 
 If you want to know more about the ontology of the metadata, you can find all the information in
-[Metadata Ontology](https://github.com/keyko-io/nevermined-internal/tree/master/docs/architecture/specs/metadata).
+[Metadata Ontology](https://github.com/nevermined-io/internal/tree/master/docs/architecture/specs/metadata).
 
 ## For Metadata Developers
 
 ### General Keyko Dev Docs
 
-For information about Keyko's Python code style and related "meta" developer docs, see [Keyko Nevermined Internal](https://github.com/keyko-io/nevermined-internal).
+For information about Keyko's Python code style and related "meta" developer docs, see [Keyko Nevermined Internal](https://github.com/nevermined-io/internal).
 
 ### Running Locally, for Dev and Test
 
 First, clone this repository:
 
 ```bash
-git clone git@github.com:keyko-io/nevermined-metadata.git
-cd nevermined-metadata/
+git clone git@github.com:nevermined-io/metadata-api.git
+cd metadata-api/
 ```
 
 Then run mongodb database that is a requirement for Nevermined Metadata. MongoDB can be installed directly using instructions from [official documentation](https://docs.mongodb.com/manual/installation/). Or if you have `docker` installed, you can run:
