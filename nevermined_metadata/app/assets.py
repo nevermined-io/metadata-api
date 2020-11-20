@@ -4,9 +4,7 @@ import logging
 from datetime import datetime
 
 from flask import Blueprint, jsonify, request, Response
-from oceandb_driver_interface.search_model import FullTextModel, QueryModel
-from plecos.plecos import (is_valid_dict_local, is_valid_dict_remote, list_errors_dict_local,
-                           list_errors_dict_remote)
+from metadatadb_driver_interface.search_model import FullTextModel, QueryModel
 
 from nevermined_metadata.app.dao import Dao
 from nevermined_metadata.config import Config
@@ -16,7 +14,7 @@ from nevermined_metadata.myapp import app
 setup_logging()
 assets = Blueprint('assets', __name__)
 
-# Prepare OceanDB
+# Prepare MetadataDB
 dao = Dao(config_file=app.config['CONFIG_FILE'])
 logger = logging.getLogger('metadata')
 
@@ -46,7 +44,7 @@ def get_ddo(did):
         return Response(_sanitize_record(asset_record), 200, content_type='application/json')
     except Exception as e:
         logger.error(e)
-        return f'{did} asset DID is not in OceanDB', 404
+        return f'{did} asset DID is not in MetadataDB', 404
 
 
 @assets.route('/metadata/<did>', methods=['GET'])
@@ -60,7 +58,7 @@ def get_metadata(did):
         return Response(_sanitize_record(metadata), 200, content_type='application/json')
     except Exception as e:
         logger.error(e)
-        return f'{did} asset DID is not in OceanDB', 404
+        return f'{did} asset DID is not in MetadataDB', 404
 
 
 @assets.route('/ddo', methods=['POST'])
@@ -113,7 +111,7 @@ def register():
         # add new assetId to response
         return Response(_sanitize_record(_record), 201, content_type='application/json')
     except Exception as err:
-        logger.error(f'encounterd an error while saving the asset data to OceanDB: {str(err)}')
+        logger.error(f'encounterd an error while saving the asset data to MetadataDB: {str(err)}')
         return f'Some error: {str(err)}', 500
 
 
@@ -171,7 +169,7 @@ def retire(did):
     """
     try:
         if dao.get(did) is None:
-            return 'This asset DID is not in OceanDB', 404
+            return 'This asset DID is not in MetadataDB', 404
         else:
             dao.delete(did)
             return 'Succesfully deleted', 200
@@ -252,31 +250,6 @@ def retire_all():
     except Exception as e:
         logger.error(e)
         return 'An error was found', 500
-
-
-@assets.route('/ddo/validate', methods=['POST'])
-def validate():
-    """Validate metadata content.
-     swagger_from_file: docs/validate.yml
-    """
-    assert isinstance(request.json, dict), 'invalid payload format.'
-    data = request.json
-    assert isinstance(data, dict), 'invalid `body` type, should be formatted as a dict.'
-    if is_valid_dict_local(data):
-        return jsonify(True)
-    else:
-        res = jsonify(_list_errors(list_errors_dict_local, data))
-        return res
-
-
-def _list_errors(list_errors_function, data):
-    error_list = list()
-    for err in list_errors_function(data):
-        stack_path = list(err[1].relative_path)
-        stack_path = [str(p) for p in stack_path]
-        this_err_response = {'path': "/".join(stack_path), 'message': err[1].message}
-        error_list.append(this_err_response)
-    return error_list
 
 
 def _sanitize_record(data_record):

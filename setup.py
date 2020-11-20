@@ -11,7 +11,7 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
-install_requirements = [
+    install_requirements = [
     'coloredlogs==10.0',
     'Flask==1.1.2',
     'Flask-Cors==3.0.8',
@@ -20,12 +20,11 @@ install_requirements = [
     'Jinja2>=2.10.1',
     'requests>=2.23.0',
     'gunicorn==19.9.0',
-    'oceandb-driver-interface==0.2.0',
-    'oceandb-mongodb-driver==0.2.0',
-    'oceandb-elasticsearch-driver==0.2.3',
+    'nevermined-metadata-driver-interface>=0.1.2',
+    'nevermined-metadata-driver-mongodb>=0.1.0',
+    'nevermined-metadata-driver-elasticsearch>m=0.1.0',
     'PyYAML==5.1',
-    'pytz==2018.5',
-    'plecos==1.0.2'
+    'pytz==2018.5'
 ]
 
 setup_requirements = ['pytest-runner==2.11.1', ]

@@ -30,7 +30,7 @@ class Config(configparser.ConfigParser):
 
         self.read_dict(config_defaults)
         self._section_name = ConfigSections.RESOURCES
-        self._oceandb_name = ConfigSections.OCEANBD
+        self._metadatadb_name = ConfigSections.METADATADB
         self._logger = kwargs.get('logger', logging.getLogger(__name__))
         self._logger.debug('Config: loading config file %s', filename)
 
@@ -67,12 +67,12 @@ class Config(configparser.ConfigParser):
 
     @property
     def db_url(self):
-        return self.get(self._oceandb_name, DB_HOSTNAME) + ":" + self.get(self._oceandb_name,
-                                                                          DB_PORT)
+        return self.get(self._metadatadb_name, DB_HOSTNAME) + ":" + self.get(self._metadatadb_name,
+                                                                             DB_PORT)
 
     @property
     def module(self):
-        return self.get(self._oceandb_name, MODULE)
+        return self.get(self._metadatadb_name, MODULE)
 
     # static methods
 

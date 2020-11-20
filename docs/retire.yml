@@ -12,6 +12,6 @@ responses:
   200:
     description: successfully deleted
   404:
-    description: This asset DID is not in OceanDB
+    description: This asset DID is not in MetadataDB
   500:
     description: Error

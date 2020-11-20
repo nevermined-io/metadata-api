@@ -1,4 +1,4 @@
-[oceandb]
+[metadatadb]
 
 module = ${DB_MODULE}
 db.hostname = ${DB_HOSTNAME}
