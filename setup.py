@@ -20,30 +20,28 @@ with open('CHANGELOG.md') as history_file:
     'Jinja2>=2.10.1',
     'requests>=2.23.0',
     'gunicorn==19.9.0',
-    'nevermined-metadata-driver-interface>=0.1.2',
+    'nevermined-metadata-driver-interface>=0.1.3',
     'nevermined-metadata-driver-mongodb>=0.1.0',
     'nevermined-metadata-driver-elasticsearch>m=0.1.0',
     'PyYAML==5.1',
     'pytz==2018.5'
 ]
 
-setup_requirements = ['pytest-runner==2.11.1', ]
+setup_requirements = ['pytest-runner', ]
 
 dev_requirements = [
-    'bumpversion==0.5.3',
-    'pkginfo==1.4.2',
-    'twine==1.11.0',
+    'bumpversion',
+    'pkginfo',
+    'twine',
     # not virtualenv: devs should already have it before pip-installing
-    'watchdog==0.8.3',
+    'watchdog',
 ]
 
 test_requirements = [
-    'codacy-coverage==1.3.11',
-    'coverage==4.5.1',
-    'mccabe==0.6.1',
-    'pylint==2.2.2',
+    'coverage',
+    'mccabe',
+    'pylint',
     'pytest',
-    'tox',
 ]
 
 setup(
