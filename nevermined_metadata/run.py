@@ -61,13 +61,13 @@ app.register_blueprint(assets, url_prefix=BaseURLs.ASSETS_URL)
 
 
 def get_status():
-    if config.get('oceandb', 'module') == 'elasticsearch':
+    if config.get('metadatadb', 'module') == 'elasticsearch':
         if Elasticsearch(config.db_url).ping():
             return 'Elasticsearch connected', 200
         else:
             return 'Not connected to any database', 400
-    elif config.get('oceandb', 'module') == 'mongodb':
-        if MongoClient(config.db_url).get_database(config.get('oceandb', 'db.name')).command(
+    elif config.get('metadatadb', 'module') == 'mongodb':
+        if MongoClient(config.db_url).get_database(config.get('metadatadb', 'db.name')).command(
                 'ping'):
             return 'Mongodb connected', 200
         else:

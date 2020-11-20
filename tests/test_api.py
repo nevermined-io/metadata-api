@@ -176,18 +176,6 @@ def test_is_listed(client, base_ddo_url):
     )['results']) == 1
 
 
-def test_validate(client_with_no_data, base_ddo_url):
-    post = client_with_no_data.post(base_ddo_url + '/validate',
-                                    data=json.dumps({}),
-                                    content_type='application/json')
-    assert post.status_code == 200
-    assert post.data == b'[{"message":"\'main\' is a required property","path":""}]\n'
-    post = client_with_no_data.post(base_ddo_url + '/validate',
-                                    data=json.dumps(json_valid),
-                                    content_type='application/json')
-    assert post.data == b'true\n'
-
-
 def test_date_format_validator():
     date = '2016-02-08T16:02:20Z'
     assert validate_date_format(date) == (None, None)

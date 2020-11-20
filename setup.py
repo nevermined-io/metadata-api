@@ -11,7 +11,7 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
-install_requirements = [
+    install_requirements = [
     'coloredlogs==10.0',
     'Flask==1.1.2',
     'Flask-Cors==3.0.8',
@@ -20,31 +20,28 @@ install_requirements = [
     'Jinja2>=2.10.1',
     'requests>=2.23.0',
     'gunicorn==19.9.0',
-    'oceandb-driver-interface==0.2.0',
-    'oceandb-mongodb-driver==0.2.0',
-    'oceandb-elasticsearch-driver==0.2.3',
+    'nevermined-metadata-driver-interface>=0.1.3',
+    'nevermined-metadata-driver-mongodb>=0.1.0',
+    'nevermined-metadata-driver-elasticsearch>=0.1.0',
     'PyYAML==5.1',
-    'pytz==2018.5',
-    'plecos==1.0.2'
+    'pytz==2018.5'
 ]
 
-setup_requirements = ['pytest-runner==2.11.1', ]
+setup_requirements = ['pytest-runner', ]
 
 dev_requirements = [
-    'bumpversion==0.5.3',
-    'pkginfo==1.4.2',
-    'twine==1.11.0',
+    'bumpversion',
+    'pkginfo',
+    'twine',
     # not virtualenv: devs should already have it before pip-installing
-    'watchdog==0.8.3',
+    'watchdog',
 ]
 
 test_requirements = [
-    'codacy-coverage==1.3.11',
-    'coverage==4.5.1',
-    'mccabe==0.6.1',
-    'pylint==2.2.2',
+    'coverage',
+    'mccabe',
+    'pylint',
     'pytest',
-    'tox',
 ]
 
 setup(
@@ -75,6 +72,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/nevermined-io/metadata-api',
-    version='0.2.0',
+    version='0.2.1',
     zip_safe=False,
 )

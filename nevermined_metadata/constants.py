@@ -1,5 +1,5 @@
 class ConfigSections:
-    OCEANBD = 'oceandb'
+    METADATADB = 'metadatadb'
     RESOURCES = 'resources'
 
 

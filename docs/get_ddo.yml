@@ -12,4 +12,4 @@ responses:
   200:
     description: successful operation
   404:
-    description: This asset DID is not in OceanDB
+    description: This asset DID is not in MetadataDB

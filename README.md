@@ -97,7 +97,7 @@ You can pass the configuration using the CONFIG_FILE environment variable (recom
 
 In the configuration there are now two sections:
 
-- oceandb: Contains different values to connect with oceandb. You can find more information about how to use OceanDB [here](https://github.com/oceanprotocol/oceandb-driver-interface).
+- metadatadb: Contains different values to connect with metadatadb. You can find more information about how to use MetadataDB [here](https://github.com/nevermined-io/metadata-driver-interface).
 - resources: In this section we are showing the url in which the nevermined metadata is going to be deployed.
 
 ```yaml
