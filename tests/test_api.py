@@ -174,6 +174,16 @@ def test_is_listed(client, base_ddo_url):
                     data=json.dumps({"query": {"price": ["14", "16"]}}),
                     content_type='application/json').data.decode('utf-8')
     )['results']) == 1
+    assert len(json.loads(
+        client.post(base_ddo_url + '/query',
+                    data=json.dumps({"query": {}, "show_unlisted": False}),
+                    content_type='application/json').data.decode('utf-8')
+    )['results']) == 1
+    assert len(json.loads(
+        client.post(base_ddo_url + '/query',
+                    data=json.dumps({"query": {}, "show_unlisted": True}),
+                    content_type='application/json').data.decode('utf-8')
+    )['results']) == 2
 
 
 def test_date_format_validator():

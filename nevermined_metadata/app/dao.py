@@ -55,7 +55,7 @@ class Dao(object):
     def delete(self, asset_id):
         return self.metadatadb.delete(asset_id)
 
-    def query(self, query):
+    def query(self, query, show_unlisted=False):
         query_list = []
         if isinstance(query, QueryModel):
             query_result, count = self.metadatadb.query(query)
@@ -63,12 +63,15 @@ class Dao(object):
             query_result, count = self.metadatadb.text_query(query)
         else:
             raise TypeError('Unrecognized `query` type %s' % type(query))
+        print(show_unlisted)
+        if show_unlisted:
+            return query_result, count
+        else:
+            for f in query_result:
+                if self.is_listed(f['service']):
+                    query_list.append(f)
 
-        for f in query_result:
-            if self.is_listed(f['service']):
-                query_list.append(f)
-
-        return query_list, count
+            return query_list, count
 
     @staticmethod
     def is_listed(services):

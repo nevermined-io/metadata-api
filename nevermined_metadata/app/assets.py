@@ -205,7 +205,7 @@ def query_text():
                                      data.get('sort', None)),
                                  offset=int(data.get('offset', 100)),
                                  page=int(data.get('page', 1)))
-    query_result = dao.query(search_model)
+    query_result = dao.query(search_model, data.get('show_unlisted'))
     for i in query_result[0]:
         _sanitize_record(i)
     response = _make_paginate_response(query_result, search_model)
@@ -229,7 +229,7 @@ def query_ddo():
         search_model = QueryModel(query={}, sort=data.get('sort'),
                                   offset=data.get('offset', 100),
                                   page=data.get('page', 1))
-    query_result = dao.query(search_model)
+    query_result = dao.query(search_model, data.get('show_unlisted'))
     for i in query_result[0]:
         _sanitize_record(i)
     response = _make_paginate_response(query_result, search_model)
