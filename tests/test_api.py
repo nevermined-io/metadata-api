@@ -31,23 +31,6 @@ def test_create_ddo(client, base_ddo_url):
         'type']
 
 
-def test_upsert_ddo(client_with_no_data, base_ddo_url):
-    """Test creation of asset"""
-    put = client_with_no_data.put(base_ddo_url + '/%s' % json_dict['id'],
-                                  data=json.dumps(json_dict2),
-                                  content_type='application/json')
-    rv = client_with_no_data.get(
-        base_ddo_url + '/%s' % json.loads(put.data.decode('utf-8'))['id'],
-        content_type='application/json')
-    assert 201 == put.status_code
-    assert json_dict['id'] in json.loads(rv.data.decode('utf-8'))['id']
-    assert json_dict['@context'] in json.loads(rv.data.decode('utf-8'))['@context']
-    assert json_dict['service'][0]['type'] in json.loads(rv.data.decode('utf-8'))['service'][0][
-        'type']
-    client_with_no_data.delete(
-        base_ddo_url + '/%s' % json.loads(put.data.decode('utf-8'))['id'])
-
-
 def test_post_with_no_ddo(client, base_ddo_url):
     post = client.post(base_ddo_url,
                        data=json.dumps(json_dict_no_metadata),
