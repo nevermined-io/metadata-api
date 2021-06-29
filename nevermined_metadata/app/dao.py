@@ -63,7 +63,6 @@ class Dao(object):
             query_result, count = self.metadatadb.text_query(query)
         else:
             raise TypeError('Unrecognized `query` type %s' % type(query))
-        print(show_unlisted)
         if show_unlisted:
             return query_result, count
         else:

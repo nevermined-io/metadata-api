@@ -93,8 +93,9 @@ def register():
                     logger.warning('Priced assets are not supported in this marketplace')
                     return 'Priced assets are not supported in this marketplace', 400
             _record['service'][service_id]['attributes']['main']['dateCreated'] = \
-                datetime.strptime(_record['service'][service_id]['attributes']['main']['dateCreated'],
-                                  '%Y-%m-%dT%H:%M:%SZ')
+                datetime.strptime(
+                    _record['service'][service_id]['attributes']['main']['dateCreated'],
+                    '%Y-%m-%dT%H:%M:%SZ')
             _record['service'][service_id]['attributes']['curation'] = {}
             _record['service'][service_id]['attributes']['curation']['rating'] = 0.00
             _record['service'][service_id]['attributes']['curation']['numVotes'] = 0
@@ -140,24 +141,16 @@ def update(did):
     _record = copy.deepcopy(data)
     _record['created'] = datetime.strptime(data['created'], '%Y-%m-%dT%H:%M:%SZ')
     _record['service'] = _reorder_services(_record['service'])
-    # if not is_valid_dict_remote(_get_metadata(_record['service'])['attributes']):
-    #     logger.error(_list_errors(list_errors_dict_remote,
-    #                               _get_metadata(_record['service'])['attributes']))
-    #     return jsonify(_list_errors(list_errors_dict_remote,
-    #                                 _get_metadata(_record['service'])['attributes'])), 400
+
     try:
-        if dao.get(did) is None:
-            register()
-            return _sanitize_record(_record), 201
-        else:
-            for service in _record['service']:
-                if service['type'] == 'metadata':
-                    if Config(filename=app.config['CONFIG_FILE']).allow_free_assets_only == 'true':
-                        if _record['service'][0]['attributes']['main']['price'] != "0":
-                            logger.warning('Priced assets are not supported in this marketplace')
-                            return 'Priced assets are not supported in this marketplace', 400
-            dao.update(_record, did)
-            return Response(_sanitize_record(_record), 200, content_type='application/json')
+        for service in _record['service']:
+            if service['type'] == 'metadata':
+                if Config(filename=app.config['CONFIG_FILE']).allow_free_assets_only == 'true':
+                    if _record['service'][0]['attributes']['main']['price'] != "0":
+                        logger.warning('Priced assets are not supported in this marketplace')
+                        return 'Priced assets are not supported in this marketplace', 400
+        dao.update(_record, did)
+        return Response(_sanitize_record(_record), 200, content_type='application/json')
     except Exception as err:
         return f'Some error: {str(err)}', 500
 
