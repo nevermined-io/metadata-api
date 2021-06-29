@@ -12,19 +12,19 @@ with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
     install_requirements = [
-    'coloredlogs==10.0',
-    'Flask==1.1.2',
-    'Flask-Cors==3.0.9',
+    'coloredlogs==15.0.1',
+    'Flask==2.0.1',
+    'Flask-Cors==3.0.10',
     'flask-swagger==0.2.14',
-    'flask-swagger-ui==3.25.0',
+    'flask-swagger-ui==3.36.0',
     'Jinja2>=2.10.1',
     'requests>=2.23.0',
-    'gunicorn==19.9.0',
+    'gunicorn==20.1.0',
     'nevermined-metadata-driver-interface>=0.1.3',
     'nevermined-metadata-driver-mongodb>=0.1.0',
     'nevermined-metadata-driver-elasticsearch>=0.1.0',
-    'PyYAML==5.4',
-    'pytz==2018.5'
+    'PyYAML==5.4.1',
+    'pytz==2021.1'
 ]
 
 setup_requirements = ['pytest-runner', ]
