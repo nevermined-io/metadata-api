@@ -5,7 +5,7 @@
 > Nevermined metadata provides an off-chain database store for metadata about data assets.
 
 ![Nevermined metadata](https://github.com/nevermined-io/metadata-api/workflows/Python%20package/badge.svg)
-[![Docker Build Status](https://img.shields.io/docker/cloud/build/keykoio/nevermined-metadata.svg)](https://hub.docker.com/r/keykoio/nevermined-metadata/)
+[![Docker Build Status](https://img.shields.io/docker/cloud/build/neverminedio/metadata-api.svg)](https://hub.docker.com/repository/docker/neverminedio/metadata-api)
 [![GitHub contributors](https://img.shields.io/github/contributors/nevermined-io/metadata-api.svg)](https://github.com/nevermined-io/metadata-api/graphs/contributors)
 
 ## For Metadata Operators
