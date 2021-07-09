@@ -101,12 +101,6 @@ def register():
             _record['service'][service_id]['attributes']['curation']['numVotes'] = 0
             _record['service'][service_id]['attributes']['curation']['isListed'] = True
     _record['service'] = _reorder_services(_record['service'])
-    # if not is_valid_dict_remote(_get_metadata(_record['service'])['attributes']):
-    #     logger.error(
-    #         _list_errors(list_errors_dict_remote,
-    #                      _get_metadata(_record['service'])['attributes']))
-    #     return jsonify(_list_errors(list_errors_dict_remote,
-    #                                 _get_metadata(_record['service'])['attributes'])), 400
     try:
         dao.register(_record, data['id'])
         # add new assetId to response
