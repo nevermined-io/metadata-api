@@ -35,7 +35,7 @@ jobs:
         ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
     - name: Elasticsearch Node is reachable
       run: |
-        wget -q --waitretry=1 --retry-connrefused -T 45 -O - http://127.0.0.1:9200
+        wget -q --waitretry=1 --retry-connrefused -T 90 -O - http://127.0.0.1:9200
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
