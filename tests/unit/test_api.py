@@ -4,8 +4,6 @@ from nevermined_metadata.config import Config
 from nevermined_metadata.app.assets import validate_date_format
 from nevermined_metadata.constants import BaseURLs
 from nevermined_metadata.app.info import get_status, get_version
-from tests.conftest import (json_before, json_dict, json_dict2, json_dict_no_metadata,
-                            json_dict_no_valid_metadata, json_update, json_valid, test_assets)
 
 
 def test_version(client):
@@ -24,7 +22,7 @@ def test_health(client, app):
     assert rv.data.decode('utf-8') == get_status(config)[0]
 
 
-def test_create_ddo(client, base_ddo_url):
+def test_create_ddo(client, base_ddo_url, json_dict):
     """Test creation of asset"""
     rv = client.get(
         base_ddo_url + '/%s' % json_dict['id'],
@@ -35,21 +33,21 @@ def test_create_ddo(client, base_ddo_url):
         'type']
 
 
-def test_post_with_no_ddo(client, base_ddo_url):
+def test_post_with_no_ddo(client, base_ddo_url, json_dict_no_metadata):
     post = client.post(base_ddo_url,
                        data=json.dumps(json_dict_no_metadata),
                        content_type='application/json')
     assert 400 == post.status_code
 
 
-def test_post_with_no_valid_ddo(client, base_ddo_url):
+def test_post_with_no_valid_ddo(client, base_ddo_url, json_dict_no_valid_metadata):
     post = client.post(base_ddo_url,
                        data=json.dumps(json_dict_no_valid_metadata),
                        content_type='application/json')
     assert 400 == post.status_code
 
 
-def test_update_ddo(client_with_no_data, base_ddo_url):
+def test_update_ddo(client_with_no_data, base_ddo_url, json_before, json_update):
     client = client_with_no_data
     post = client.post(base_ddo_url,
                        data=json.dumps(json_before),
@@ -72,7 +70,7 @@ def test_update_ddo(client_with_no_data, base_ddo_url):
         base_ddo_url + '/%s' % json.loads(post.data.decode('utf-8'))['id'])
 
 
-def test_query_metadata(client, base_ddo_url):
+def test_query_metadata(client, base_ddo_url, test_assets):
     assert len(json.loads(client.post(base_ddo_url + '/query',
                                       data=json.dumps({"query": {}}),
                                       content_type='application/json').data.decode('utf-8'))[
@@ -128,7 +126,7 @@ def test_query_metadata(client, base_ddo_url):
             client.delete(BaseURLs.BASE_METADATA_URL + '/assets/ddo/%s' % a['id'])
 
 
-def test_delete_all(client_with_no_data, base_ddo_url):
+def test_delete_all(client_with_no_data, base_ddo_url, json_dict, json_update):
     client_with_no_data.post(base_ddo_url,
                              data=json.dumps(json_dict),
                              content_type='application/json')
@@ -144,7 +142,7 @@ def test_delete_all(client_with_no_data, base_ddo_url):
                    'ids']) == 0
 
 
-def test_is_listed(client, base_ddo_url):
+def test_is_listed(client, base_ddo_url, json_dict, json_dict2):
     assert len(json.loads(
         client.get(BaseURLs.BASE_METADATA_URL + '/assets').data.decode('utf-8'))['ids']
                ) == 2

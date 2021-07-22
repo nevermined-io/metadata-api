@@ -1,8 +1,6 @@
 import configparser
 import tempfile
 
-import pytest
-
 from nevermined_metadata.app.dao import Dao
 
 def test_load_internal_external_plugin():
