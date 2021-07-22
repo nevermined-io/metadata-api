@@ -1,8 +1,9 @@
 import json
+from nevermined_metadata.config import Config
 
 from nevermined_metadata.app.assets import validate_date_format
 from nevermined_metadata.constants import BaseURLs
-from nevermined_metadata.run import get_status, get_version
+from nevermined_metadata.app.info import get_status, get_version
 from tests.conftest import (json_before, json_dict, json_dict2, json_dict_no_metadata,
                             json_dict_no_valid_metadata, json_update, json_valid, test_assets)
 
@@ -10,14 +11,17 @@ from tests.conftest import (json_before, json_dict, json_dict2, json_dict_no_met
 def test_version(client):
     """Test version in root endpoint"""
     rv = client.get('/')
+
     assert json.loads(rv.data.decode('utf-8'))['software'] == 'Nevermined metadata'
     assert json.loads(rv.data.decode('utf-8'))['version'] == get_version()
 
 
-def test_health(client):
+def test_health(client, app):
     """Test health check endpoint"""
+    config = Config(app.config['CONFIG_FILE'])
     rv = client.get('/health')
-    assert rv.data.decode('utf-8') == get_status()[0]
+
+    assert rv.data.decode('utf-8') == get_status(config)[0]
 
 
 def test_create_ddo(client, base_ddo_url):

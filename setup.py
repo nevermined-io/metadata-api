@@ -23,6 +23,7 @@ with open('CHANGELOG.md') as history_file:
     'nevermined-metadata-driver-interface>=0.1.3',
     'nevermined-metadata-driver-mongodb>=0.1.0',
     'nevermined-metadata-driver-elasticsearch>=0.1.3',
+    'nevermined-metadata-driver-arweave>=0.1.0',
     'PyYAML==5.4.1',
     'pytz==2021.1'
 ]

@@ -1,82 +1,52 @@
-import configparser
+import logging
+import os
 
-from elasticsearch import Elasticsearch
-from flask import jsonify
-from flask_swagger import swagger
+from flask import Flask
+from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
-from pymongo import MongoClient
 
 from nevermined_metadata.app.assets import assets
+from nevermined_metadata.app.info import info
 from nevermined_metadata.config import Config
-from nevermined_metadata.constants import BaseURLs, Metadata
-from nevermined_metadata.myapp import app
+from nevermined_metadata.constants import BaseURLs
 
-config = Config(filename=app.config['CONFIG_FILE'])
-metadata_url = config.metadata_url
+logger = logging.getLogger(__name__)
 
 
-def get_version():
-    conf = configparser.ConfigParser()
-    conf.read('.bumpversion.cfg')
-    return conf['bumpversion']['current_version']
+def create_app(config_file='config.ini'):
+    app = Flask(__name__)
+    CORS(app)
 
-
-@app.route("/")
-def version():
-    info = dict()
-    info['software'] = Metadata.TITLE
-    info['version'] = get_version()
-    info['plugin'] = config.module
-    return jsonify(info)
-
-
-@app.route("/health")
-def health():
-    return get_status()
-
-
-@app.route("/spec")
-def spec():
-    swag = swagger(app, from_file_keyword='swagger_from_file')
-    swag['info']['version'] = get_version()
-    swag['info']['title'] = Metadata.TITLE
-    swag['info']['description'] = Metadata.DESCRIPTION + '`' + metadata_url + '`.'
-    swag['info']['connected'] = get_status()
-    # swag['basePath'] = BaseURLs.BASE_AQUARIUS_URL
-    return jsonify(swag)
-
-
-# Call factory function to create our blueprint
-swaggerui_blueprint = get_swaggerui_blueprint(
-    BaseURLs.SWAGGER_URL,
-    metadata_url + '/spec',
-    config={  # Swagger UI config overrides
-        'app_name': "Test application"
-    },
-)
-
-# Register blueprint at URL
-app.register_blueprint(swaggerui_blueprint, url_prefix=BaseURLs.SWAGGER_URL)
-app.register_blueprint(assets, url_prefix=BaseURLs.ASSETS_URL)
-
-
-def get_status():
-    if config.get('metadatadb', 'module') == 'elasticsearch':
-        if Elasticsearch(config.db_url).ping():
-            return 'Elasticsearch connected', 200
-        else:
-            return 'Not connected to any database', 400
-    elif config.get('metadatadb', 'module') == 'mongodb':
-        if MongoClient(config.db_url).get_database(config.get('metadatadb', 'db.name')).command(
-                'ping'):
-            return 'Mongodb connected', 200
-        else:
-            return 'Not connected to any database', 400
+    # Load configuration settings
+    if 'CONFIG_FILE' in os.environ and os.environ['CONFIG_FILE']:
+        app.config['CONFIG_FILE'] = os.environ['CONFIG_FILE']
     else:
-        return 'Not connected to any database', 400
+        logger.info('Using default config: config.ini')
+        app.config['CONFIG_FILE'] = config_file
+
+    config = Config(app.config['CONFIG_FILE'])
+
+    # Call factory function to create our blueprint
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        BaseURLs.SWAGGER_URL,
+        config.metadata_url + '/spec',
+        config={  # Swagger UI config overrides
+            'app_name': "Test application"
+        },
+    )
+
+    # Register blueprint at URL
+    app.register_blueprint(swaggerui_blueprint, url_prefix=BaseURLs.SWAGGER_URL)
+    app.register_blueprint(assets, url_prefix=BaseURLs.ASSETS_URL)
+    app.register_blueprint(info, url_prefix='/')
+
+    return app
 
 
 if __name__ == '__main__':
+    app = create_app()
+    config = Config(app.config['CONFIG_FILE'])
+
     if isinstance(config.metadata_url.split(':')[-1], int):
         app.run(host=config.metadata_url.split(':')[1],
                 port=config.metadata_url.split(':')[-1])

@@ -1,14 +1,20 @@
 import copy
+from enum import auto
 import json
+import os
 from urllib.request import urlopen
 
 import pytest
 
 from nevermined_metadata.constants import BaseURLs
-from nevermined_metadata.run import app
+from nevermined_metadata.run import create_app
 
-app = app
 
+@pytest.fixture(scope="session", autouse=True)
+def app(pytestconfig):
+    app = create_app(config_file='./tests/resources/config-test-external.ini')
+    with app.app_context():
+        yield app
 
 @pytest.fixture
 def base_ddo_url():
@@ -16,13 +22,13 @@ def base_ddo_url():
 
 
 @pytest.fixture
-def client_with_no_data():
+def client_with_no_data(app):
     client = app.test_client()
     yield client
 
 
 @pytest.fixture
-def client():
+def client(app):
     client = app.test_client()
     client.delete(BaseURLs.BASE_METADATA_URL + '/assets/ddo')
     post = client.post(BaseURLs.BASE_METADATA_URL + '/assets/ddo',
