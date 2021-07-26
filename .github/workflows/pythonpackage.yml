@@ -26,14 +26,23 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Configure sysctl limits
       run: |
-        sudo swapoff -a
-        sudo sysctl -w vm.swappiness=1
-        sudo sysctl -w fs.file-max=262144
-        sudo sysctl -w vm.max_map_count=262144
-        ES_VERSION=7.13.2 ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}-linux-x86_64.tar.gz
-        wget ${ES_DOWNLOAD_URL}
-        tar -xzf elasticsearch-${ES_VERSION}-linux-x86_64.tar.gz
-        ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
+        docker run \
+          -p 9200:9200 \
+          -p 9300:9300 \
+          -e "discovery.type=single-node" \
+          docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+          -d
+
+
+
+        # sudo swapoff -a
+        # sudo sysctl -w vm.swappiness=1
+        # sudo sysctl -w fs.file-max=262144
+        # sudo sysctl -w vm.max_map_count=262144
+        # ES_VERSION=7.13.2 ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}-linux-x86_64.tar.gz
+        # wget ${ES_DOWNLOAD_URL}
+        # tar -xzf elasticsearch-${ES_VERSION}-linux-x86_64.tar.gz
+        # ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
     - name: Elasticsearch Node is reachable
       run: |
         wget -q --waitretry=1 --retry-connrefused -T 180 -O - http://127.0.0.1:9200
