@@ -73,8 +73,8 @@ jobs:
 
     - name: Run flask under uwsgi
       run: |
-        uwsgi -d --ini uwsgi.ini
+        uwsgi --ini uwsgi.ini
         sleep 5
     - name: Test with pytest
       run: |
-        pytest -m integration
+        pytest -m integration -s
