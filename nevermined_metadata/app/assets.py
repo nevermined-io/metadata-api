@@ -45,6 +45,18 @@ def get_ddo(did):
         return f'{did} asset DID is not in MetadataDB', 404
 
 
+@assets.route('/ddo/<did>/status', methods=['GET'])
+def get_status(did):
+    """Get the status of a particular DDO."""
+    # TODO: Add swager definition
+    try:
+        status = get_dao().status(did)
+        return Response(_sanitize_record(status), 200, content_type='application/json')
+    except Exception as e:
+        logger.error('Error fetching the status of %s: %s', did, str(e))
+        return f'Error fetching the satus of {did}: {str(e)}', 500
+
+
 @assets.route('/metadata/<did>', methods=['GET'])
 def get_metadata(did):
     """Get metadata of a particular asset

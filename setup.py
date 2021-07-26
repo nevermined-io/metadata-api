@@ -20,10 +20,10 @@ with open('CHANGELOG.md') as history_file:
     'Jinja2>=2.10.1',
     'requests>=2.23.0',
     'gunicorn==20.1.0',
-    'nevermined-metadata-driver-interface>=0.1.3',
+    'nevermined-metadata-driver-interface>=0.2.0',
     'nevermined-metadata-driver-mongodb>=0.1.0',
     'nevermined-metadata-driver-elasticsearch>=0.1.3',
-    'nevermined-metadata-driver-arweave>=0.1.0',
+    'nevermined-metadata-driver-arweave>=0.1.1',
     'PyYAML==5.4.1',
     'pytz==2021.1'
 ]

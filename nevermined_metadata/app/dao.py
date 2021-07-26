@@ -1,11 +1,10 @@
 import copy
-from datetime import datetime
 import logging
 import configparser
 
 from flask import current_app, g
 
-from metadatadb_driver_interface import MetadataDb, metadatadb
+from metadatadb_driver_interface import MetadataDb
 from metadatadb_driver_interface.search_model import FullTextModel, QueryModel
 from metadatadb_driver_interface.constants import CONFIG_OPTION_EXTERNAL
 
@@ -66,14 +65,19 @@ class Dao(object):
             return None
 
     def register(self, record, asset_id):
+        external_id = None,
+        external_status = None
         if self.metadatadb_external is not None:
-            transaction_id = self.metadatadb_external.write(
+            external_id = self.metadatadb_external.write(
                 self._datetime_to_date(record))
-            self._update_external_index(asset_id, transaction_id, 'PENDING')
-            logger.info('Submitted %s to %s with txid %s', asset_id,
-                self.metadatadb_external.type, transaction_id)
+            external_status = 'PENDING'
+            logger.info('Submitted %s to %s with id %s', asset_id,
+                self.metadatadb_external.type, external_id)
 
-        return self.metadatadb.write(record, asset_id)
+        internal_id = self.metadatadb.write(record, asset_id)
+        self._update_status_index(asset_id, internal_id, 'ACCEPTED', external_id, external_status)
+
+        return internal_id
 
     def update(self, record, asset_id):
         if self.metadatadb_external is not None:
@@ -104,6 +108,9 @@ class Dao(object):
 
             return query_list, count
 
+    def status(self, asset_id):
+        return self._get_status_index(asset_id)
+
     @staticmethod
     def is_listed(services):
         for service in services:
@@ -111,12 +118,19 @@ class Dao(object):
                 if 'curation' in service['attributes'] and 'isListed' in service['attributes']['curation']:
                     return service['attributes']['curation']['isListed']
 
-    def _update_external_index(self, did, external_id, status):
+    def _update_status_index(self, did, internal_id, internal_status, external_id, external_status):
         body = {
             'did': did,
-            'externalId': external_id,
-            'type': self.metadatadb_external.type,
-            'status': status,
+            'internal': {
+                'id': internal_id,
+                'type': self.metadatadb.type,
+                'status': internal_status
+            },
+            'external': {
+                'id': external_id,
+                'type': self.metadatadb_external.type,
+                'status': external_status
+            },
         }
         logger.info('Updating external index %s', body)
         return self._es.index(
@@ -126,7 +140,7 @@ class Dao(object):
             refresh='wait_for'
         )['_id']
 
-    def _get_external_index(self, did):
+    def _get_status_index(self, did):
         return self._es.get(
             index = self._external_index,
             id=did
@@ -140,15 +154,32 @@ class Dao(object):
                         'did': {
                             'type': 'text'
                         },
-                        'externalId': {
-                            'type': 'text'
+                        'internal': {
+                            'properties': {
+                                'id': {
+                                    'type': 'text'
+                                },
+                                'type': {
+                                    'type': 'text'
+                                },
+                                'status': {
+                                    'type': 'text'
+                                }
+                            }
                         },
-                        'type': {
-                            'type': 'text'
+                        'external': {
+                            'properties': {
+                                'id': {
+                                    'type': 'text'
+                                },
+                                'type': {
+                                    'type': 'text'
+                                },
+                                'status': {
+                                    'type': 'text'
+                                }
+                            }
                         },
-                        'status': {
-                            'type': 'text'
-                        }
                     }
                 }
             }
@@ -170,7 +201,6 @@ class Dao(object):
                         .strftime('%Y-%m-%dT%H:%M:%SZ')
 
         return result
-
 
 
 def get_dao():

@@ -33,6 +33,21 @@ def test_create_ddo(client, base_ddo_url, json_dict):
         'type']
 
 
+def test_status(client, base_ddo_url, json_dict):
+    url = f'{base_ddo_url}/{json_dict["id"]}/status'
+    response = client.get(url, content_type='application/json')
+
+    assert response.status_code == 200
+
+    status = response.get_json()
+    assert status['did'] == json_dict['id']
+    assert status['internal'] is not None
+    assert status['internal']['id'] is not None
+    assert status['internal']['type'] == 'Elasticsearch'
+    assert status['internal']['status'] == 'ACCEPTED'
+    assert status['external'] is None
+
+
 def test_post_with_no_ddo(client, base_ddo_url, json_dict_no_metadata):
     post = client.post(base_ddo_url,
                        data=json.dumps(json_dict_no_metadata),
