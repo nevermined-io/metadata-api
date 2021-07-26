@@ -118,6 +118,36 @@ class Dao(object):
                 if 'curation' in service['attributes'] and 'isListed' in service['attributes']['curation']:
                     return service['attributes']['curation']['isListed']
 
+    def update_external_status(self):
+        import json
+        results = self._es.search(
+            index=self._external_index,
+            body={
+                'query': {
+                    'match': {
+                        'external.status': {
+                            'query': 'PENDING'
+                        }
+                    },
+                }
+            },
+            filter_path=['hits.hits._source']
+        )
+
+        if 'hits' not in results:
+            return
+
+        for result in results['hits']['hits']:
+            document = result['_source']
+            new_status = self.metadatadb_external.status(document['external']['id'])
+            self._update_status_index(
+                document['did'],
+                document['internal']['id'],
+                document['internal']['status'],
+                document['external']['id'],
+                new_status
+            )
+
     def _update_status_index(self, did, internal_id, internal_status, external_id, external_status):
         body = {
             'did': did,
