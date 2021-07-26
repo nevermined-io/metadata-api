@@ -11,11 +11,14 @@ def test_create_ddo(client, base_ddo_url, json_dict, dao):
         content_type='application/json')
     assert rv.status_code == 200
 
-    status = dao._get_external_index(json_dict['id'])
+    status = dao._get_status_index(json_dict['id'])
+    status_external = status['external']
     assert status['did'] == json_dict['id']
-    assert len(status['externalId']) == 43
-    assert status['type'] == 'Arweave'
-    assert status['status'] == 'PENDING'
+
+    assert status_external is not None
+    assert status_external['id'] is not None
+    assert status_external['type'] == 'Arweave'
+    assert status_external['status'] == 'PENDING'
 
 
 def test_update_ddo(client, base_ddo_url, json_dict, json_update):

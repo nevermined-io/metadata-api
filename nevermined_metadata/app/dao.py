@@ -65,7 +65,7 @@ class Dao(object):
             return None
 
     def register(self, record, asset_id):
-        external_id = None,
+        external_id = None
         external_status = None
         if self.metadatadb_external is not None:
             external_id = self.metadatadb_external.write(
@@ -126,12 +126,18 @@ class Dao(object):
                 'type': self.metadatadb.type,
                 'status': internal_status
             },
-            'external': {
-                'id': external_id,
-                'type': self.metadatadb_external.type,
-                'status': external_status
-            },
+            'external': None
         }
+
+        if external_id is not None:
+            body.update({
+                    'external': {
+                        'id': external_id,
+                        'type': self.metadatadb_external.type,
+                        'status': external_status
+                    }
+                }
+            )
         logger.info('Updating external index %s', body)
         return self._es.index(
             index=self._external_index,
