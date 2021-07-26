@@ -185,44 +185,43 @@ class Dao(object):
     def _init_elasticsearch(self):
         mapping = {
             'mappings': {
-                'members': {
-                    'properties': {
-                        'did': {
-                            'type': 'text'
-                        },
-                        'internal': {
-                            'properties': {
-                                'id': {
-                                    'type': 'text'
-                                },
-                                'type': {
-                                    'type': 'text'
-                                },
-                                'status': {
-                                    'type': 'text'
-                                }
+                'properties': {
+                    'did': {
+                        'type': 'text'
+                    },
+                    'internal': {
+                        'properties': {
+                            'id': {
+                                'type': 'text'
+                            },
+                            'type': {
+                                'type': 'text'
+                            },
+                            'status': {
+                                'type': 'text'
                             }
-                        },
-                        'external': {
-                            'properties': {
-                                'id': {
-                                    'type': 'text'
-                                },
-                                'type': {
-                                    'type': 'text'
-                                },
-                                'status': {
-                                    'type': 'text'
-                                }
+                        }
+                    },
+                    'external': {
+                        'properties': {
+                            'id': {
+                                'type': 'text'
+                            },
+                            'type': {
+                                'type': 'text'
+                            },
+                            'status': {
+                                'type': 'text'
                             }
-                        },
-                    }
+                        }
+                    },
                 }
             }
         }
 
         logger.info('Initializing elasticsearch...')
-        self._es.indices.create(index=self._external_index, ignore=400, body=mapping)
+        result = self._es.indices.create(index=self._external_index, ignore=400, body=mapping)
+        logger.info(result)
 
     @staticmethod
     def _datetime_to_date(record):
