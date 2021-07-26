@@ -25,7 +25,9 @@ with open('CHANGELOG.md') as history_file:
     'nevermined-metadata-driver-elasticsearch>=0.1.3',
     'nevermined-metadata-driver-arweave>=0.1.1',
     'PyYAML==5.4.1',
-    'pytz==2021.1'
+    'pytz==2021.1',
+    'uwsgidecorators==1.1.0',
+    'uWSGI==2.0.19.1'
 ]
 
 setup_requirements = ['pytest-runner', ]

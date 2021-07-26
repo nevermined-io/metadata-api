@@ -9,7 +9,7 @@ from nevermined_metadata.run import app
 logger = logging.getLogger(__name__)
 
 
-@timer(10)
+@timer(60)
 def check_status(_num):
     logger.info('Checking status of external assets...')
     with app.app_context():

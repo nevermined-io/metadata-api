@@ -43,6 +43,9 @@ def create_app(config_file='config.ini'):
     return app
 
 
+app = create_app()
+
+
 if __name__ == '__main__':
     app = create_app()
     config = Config(app.config['CONFIG_FILE'])
