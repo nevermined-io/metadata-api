@@ -2,7 +2,7 @@ import copy
 import logging
 import configparser
 
-from flask import current_app, g
+from flask import current_app, g, url_for
 
 from metadatadb_driver_interface import MetadataDb
 from metadatadb_driver_interface.search_model import FullTextModel, QueryModel
@@ -149,22 +149,29 @@ class Dao(object):
             )
 
     def _update_status_index(self, did, internal_id, internal_status, external_id, external_status):
+        internal_url = url_for('assets.get_ddo', did=did, _external=True)
+
         body = {
             'did': did,
             'internal': {
                 'id': internal_id,
                 'type': self.metadatadb.type,
-                'status': internal_status
+                'status': internal_status,
+                'url': internal_url
             },
             'external': None
         }
 
         if external_id is not None:
+            # TODO: Add a url method to the driver interface
+            external_url = f'{self.metadatadb_external.driver.wallet.api_url}/tx/{external_id}'
             body.update({
                     'external': {
                         'id': external_id,
                         'type': self.metadatadb_external.type,
-                        'status': external_status
+                        'status': external_status,
+                        'url': external_url
+
                     }
                 }
             )
@@ -199,6 +206,9 @@ class Dao(object):
                             },
                             'status': {
                                 'type': 'text'
+                            },
+                            'url': {
+                                'type': 'text'
                             }
                         }
                     },
@@ -212,9 +222,12 @@ class Dao(object):
                             },
                             'status': {
                                 'type': 'text'
+                            },
+                            'url': {
+                                'type': 'text'
                             }
                         }
-                    },
+                    }
                 }
             }
         }

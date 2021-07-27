@@ -1,6 +1,8 @@
 import json
-from nevermined_metadata.config import Config
 
+from flask import url_for
+
+from nevermined_metadata.config import Config
 from nevermined_metadata.app.assets import validate_date_format
 from nevermined_metadata.constants import BaseURLs
 from nevermined_metadata.app.info import get_status, get_version
@@ -36,15 +38,16 @@ def test_create_ddo(client, base_ddo_url, json_dict):
 def test_status(client, base_ddo_url, json_dict):
     url = f'{base_ddo_url}/{json_dict["id"]}/status'
     response = client.get(url, content_type='application/json')
-
     assert response.status_code == 200
 
     status = response.get_json()
+    expected_url = url_for('assets.get_ddo', did=json_dict['id'], _external=True)
     assert status['did'] == json_dict['id']
     assert status['internal'] is not None
     assert status['internal']['id'] is not None
     assert status['internal']['type'] == 'Elasticsearch'
     assert status['internal']['status'] == 'ACCEPTED'
+    assert status['internal']['url'] == expected_url
     assert status['external'] is None
 
 

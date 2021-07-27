@@ -3,7 +3,7 @@ import configparser
 from elasticsearch import Elasticsearch
 from pymongo.mongo_client import MongoClient
 from flask.blueprints import Blueprint
-from flask import current_app
+from flask import current_app, url_for
 from flask.json import jsonify
 from flask_swagger import swagger
 
@@ -16,6 +16,7 @@ info = Blueprint('info', __name__)
 @info.route("/")
 def version():
     # TODO: Add here information about arweave if running
+    print(url_for('assets.get_status', did='asdasd', _external=True))
     config = Config(current_app.config['CONFIG_FILE'])
     info = {
         'software': Metadata.TITLE,
