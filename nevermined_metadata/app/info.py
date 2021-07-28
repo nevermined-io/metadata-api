@@ -21,8 +21,12 @@ def version():
     info = {
         'software': Metadata.TITLE,
         'version': get_version(),
-        'plugin': config.module
+        'plugins': [config.module]
     }
+
+    if config.module_external is not None:
+        info['plugins'].append(config.module_external)
+
     return jsonify(info)
 
 

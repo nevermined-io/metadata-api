@@ -31,6 +31,7 @@ class Config(configparser.ConfigParser):
         self.read_dict(config_defaults)
         self._section_name = ConfigSections.RESOURCES
         self._metadatadb_name = ConfigSections.METADATADB
+        self._metadatadb_external_name = ConfigSections.EXTERNAL
         self._logger = kwargs.get('logger', logging.getLogger(__name__))
         self._logger.debug('Config: loading config file %s', filename)
 
@@ -73,6 +74,13 @@ class Config(configparser.ConfigParser):
     @property
     def module(self):
         return self.get(self._metadatadb_name, MODULE)
+
+    @property
+    def module_external(self):
+        try:
+            return self.get(self._metadatadb_external_name, MODULE)
+        except configparser.NoSectionError:
+            return None
 
     # static methods
 

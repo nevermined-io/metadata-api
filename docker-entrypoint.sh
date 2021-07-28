@@ -2,5 +2,6 @@
 
 export CONFIG_FILE=/nevermined_metadata/config.ini
 envsubst < /nevermined_metadata/config.ini.template > /nevermined_metadata/config.ini
-gunicorn -b ${METADATA_URL#*://} -w ${METADATA_WORKERS} nevermined_metadata.run:app
+#envsubst < /nevermined_metadata/uwsgi.ini.template > /nevermined_metadata/uwsgi.ini
+uwsgi --ini uwsgi.ini.template
 tail -f /dev/null

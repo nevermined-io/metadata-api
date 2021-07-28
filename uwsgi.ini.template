@@ -1,12 +1,15 @@
 [uwsgi]
 module = nevermined_metadata.run:app
 master = true
-http = localhost:5000
+http = $(METADATA_HOST)
 socket = /tmp/uwsgi.socket
-processes = 4
+processes = $(METADATA_WORKERS)
 vacuum = true
 
 spooler = mytasks
 import = nevermined_metadata.app.tasks
+
+uid = uwsgi
+gid = uwsgi
 
 die-on-term = true

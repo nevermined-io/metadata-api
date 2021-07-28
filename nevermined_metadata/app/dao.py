@@ -119,7 +119,6 @@ class Dao(object):
                     return service['attributes']['curation']['isListed']
 
     def update_external_status(self):
-        import json
         results = self._es.search(
             index=self._external_index,
             body={
@@ -140,6 +139,7 @@ class Dao(object):
         for result in results['hits']['hits']:
             document = result['_source']
             new_status = self.metadatadb_external.status(document['external']['id'])
+            logger.info("%s: %s", document['external']['id'], new_status)
             self._update_status_index(
                 document['did'],
                 document['internal']['id'],
@@ -149,7 +149,9 @@ class Dao(object):
             )
 
     def _update_status_index(self, did, internal_id, internal_status, external_id, external_status):
-        internal_url = url_for('assets.get_ddo', did=did, _external=True)
+        internal_url = None
+        with current_app.request_context():
+            internal_url = url_for('assets.get_ddo', did=did, _external=True)
 
         body = {
             'did': did,
