@@ -35,13 +35,15 @@ def test_create_ddo(client, base_ddo_url, json_dict):
         'type']
 
 
-def test_status(client, base_ddo_url, json_dict):
+def test_status(client, base_ddo_url, json_dict, app):
     url = f'{base_ddo_url}/{json_dict["id"]}/status'
     response = client.get(url, content_type='application/json')
     assert response.status_code == 200
 
     status = response.get_json()
-    expected_url = url_for('assets.get_ddo', did=json_dict['id'], _external=True)
+    with app.test_request_context():
+        expected_url = url_for('assets.get_ddo', did=json_dict['id'], _external=True)
+
     assert status['did'] == json_dict['id']
     assert status['internal'] is not None
     assert status['internal']['id'] is not None
