@@ -14,7 +14,7 @@ def test_create_ddo(client, base_ddo_url, json_dict, dao):
 
     status = dao._get_status_index(json_dict['id'])
     status_external = status['external']
-    expected_url = f'{dao.metadatadb_external.driver.wallet.api_url}/tx/{status_external["id"]}'
+    expected_url = f'{dao.metadatadb_external.driver.wallet.api_url}/{status_external["id"]}'
 
     assert status['did'] == json_dict['id']
     assert status_external is not None
