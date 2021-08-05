@@ -11,12 +11,13 @@ RUN groupadd -r uwsgi && useradd -r -g uwsgi uwsgi
 
 COPY . /nevermined_metadata
 
-RUN chown -R uwsgi:uwsgi /nevermined_metadata
 WORKDIR /nevermined_metadata
 
 
 # Only install install_requirements, not dev_ or test_requirements
 RUN pip install .
+RUN chown -R uwsgi:uwsgi /nevermined_metadata
+
 
 # config.ini configuration file variables
 ENV DB_MODULE='mongodb'
