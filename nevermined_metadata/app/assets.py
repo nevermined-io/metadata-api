@@ -3,19 +3,17 @@ import json
 import logging
 from datetime import datetime
 
-from flask import Blueprint, jsonify, request, Response
+from metadatadb_driver_interface.exceptions import MetadataDbError
+from nevermined_metadata.app.dao import get_dao
+
+from flask import Blueprint, request, Response, g, current_app
 from metadatadb_driver_interface.search_model import FullTextModel, QueryModel
 
-from nevermined_metadata.app.dao import Dao
 from nevermined_metadata.config import Config
 from nevermined_metadata.log import setup_logging
-from nevermined_metadata.myapp import app
 
 setup_logging()
 assets = Blueprint('assets', __name__)
-
-# Prepare MetadataDB
-dao = Dao(config_file=app.config['CONFIG_FILE'])
 logger = logging.getLogger('metadata')
 
 
@@ -28,7 +26,7 @@ def get_assets():
     args = []
     query = dict()
     args.append(query)
-    asset_with_id = dao.get_all_listed_assets()
+    asset_with_id = get_dao().get_all_listed_assets()
     asset_ids = [a['id'] for a in asset_with_id]
     resp_body = dict({'ids': asset_ids})
     return Response(_sanitize_record(resp_body), 200, content_type='application/json')
@@ -40,11 +38,23 @@ def get_ddo(did):
     swagger_from_file: docs/get_ddo.yml
     """
     try:
-        asset_record = dao.get(did)
+        asset_record = get_dao().get(did)
         return Response(_sanitize_record(asset_record), 200, content_type='application/json')
     except Exception as e:
         logger.error(e)
         return f'{did} asset DID is not in MetadataDB', 404
+
+
+@assets.route('/ddo/<did>/status', methods=['GET'])
+def get_status(did):
+    """Get the status of a particular DDO."""
+    # TODO: Add swager definition
+    try:
+        status = get_dao().status(did)
+        return Response(_sanitize_record(status), 200, content_type='application/json')
+    except Exception as e:
+        logger.error('Error fetching the status of %s: %s', did, str(e))
+        return f'Error fetching the satus of {did}: {str(e)}', 500
 
 
 @assets.route('/metadata/<did>', methods=['GET'])
@@ -53,7 +63,7 @@ def get_metadata(did):
     swagger_from_file: docs/get_metadata.yml
     """
     try:
-        asset_record = dao.get(did)
+        asset_record = get_dao().get(did)
         metadata = _get_metadata(asset_record['service'])
         return Response(_sanitize_record(metadata), 200, content_type='application/json')
     except Exception as e:
@@ -82,29 +92,24 @@ def register():
     msg, status = validate_date_format(data['created'])
     if status:
         return msg, status
-    _record = dict()
-    _record = copy.deepcopy(data)
-    _record['created'] = datetime.strptime(data['created'], '%Y-%m-%dT%H:%M:%SZ')
-    for service in _record['service']:
+
+    record = _reorder_services(data)
+    record = _date_to_datetime(record)
+
+    for i, service in enumerate(record['service']):
         if service['type'] == 'metadata':
-            service_id = int(service['index'])
-            if Config(filename=app.config['CONFIG_FILE']).allow_free_assets_only == 'true':
-                if _record['service'][service_id]['attributes']['main']['price'] != "0":
+            if Config(filename=current_app.config['CONFIG_FILE']).allow_free_assets_only == 'true':
+                if record['service'][i]['attributes']['main']['price'] != "0":
                     logger.warning('Priced assets are not supported in this marketplace')
                     return 'Priced assets are not supported in this marketplace', 400
-            _record['service'][service_id]['attributes']['main']['dateCreated'] = \
-                datetime.strptime(
-                    _record['service'][service_id]['attributes']['main']['dateCreated'],
-                    '%Y-%m-%dT%H:%M:%SZ')
-            _record['service'][service_id]['attributes']['curation'] = {}
-            _record['service'][service_id]['attributes']['curation']['rating'] = 0.00
-            _record['service'][service_id]['attributes']['curation']['numVotes'] = 0
-            _record['service'][service_id]['attributes']['curation']['isListed'] = True
-    _record['service'] = _reorder_services(_record['service'])
+            record['service'][i]['attributes']['curation'] = {}
+            record['service'][i]['attributes']['curation']['rating'] = 0.00
+            record['service'][i]['attributes']['curation']['numVotes'] = 0
+            record['service'][i]['attributes']['curation']['isListed'] = True
     try:
-        dao.register(_record, data['id'])
+        get_dao().register(record, data['id'])
         # add new assetId to response
-        return Response(_sanitize_record(_record), 201, content_type='application/json')
+        return Response(_sanitize_record(record), 201, content_type='application/json')
     except Exception as err:
         logger.error(f'encounterd an error while saving the asset data to MetadataDB: {str(err)}')
         return f'Some error: {str(err)}', 500
@@ -131,20 +136,22 @@ def update(did):
     msg, status = validate_date_format(data['created'])
     if msg:
         return msg, status
-    _record = dict()
-    _record = copy.deepcopy(data)
-    _record['created'] = datetime.strptime(data['created'], '%Y-%m-%dT%H:%M:%SZ')
-    _record['service'] = _reorder_services(_record['service'])
+
+    record = _reorder_services(data)
+    record = _date_to_datetime(record)
 
     try:
-        for service in _record['service']:
+        for service in record['service']:
             if service['type'] == 'metadata':
-                if Config(filename=app.config['CONFIG_FILE']).allow_free_assets_only == 'true':
-                    if _record['service'][0]['attributes']['main']['price'] != "0":
+                if Config(filename=current_app.config['CONFIG_FILE']).allow_free_assets_only == 'true':
+                    if record['service'][0]['attributes']['main']['price'] != "0":
                         logger.warning('Priced assets are not supported in this marketplace')
                         return 'Priced assets are not supported in this marketplace', 400
-        dao.update(_record, did)
-        return Response(_sanitize_record(_record), 200, content_type='application/json')
+        get_dao().update(record, did)
+        return Response(_sanitize_record(record), 200, content_type='application/json')
+    except MetadataDbError as e:
+        logger.warning('%s', e)
+        return str(e), 405
     except Exception as err:
         return f'Some error: {str(err)}', 500
 
@@ -155,11 +162,14 @@ def retire(did):
     swagger_from_file: docs/retire.yml
     """
     try:
-        if dao.get(did) is None:
+        if get_dao().get(did) is None:
             return 'This asset DID is not in MetadataDB', 404
         else:
-            dao.delete(did)
+            get_dao().delete(did)
             return 'Succesfully deleted', 200
+    except MetadataDbError as e:
+        logger.warning('%s', e)
+        return str(e), 405
     except Exception as err:
         return f'Some error: {str(err)}', 500
 
@@ -172,7 +182,7 @@ def get_asset_ddos():
     args = []
     query = dict()
     args.append(query)
-    assets_with_id = dao.get_all_listed_assets()
+    assets_with_id = get_dao().get_all_listed_assets()
     assets_metadata = {a['id']: a for a in assets_with_id}
     for i in assets_metadata:
         _sanitize_record(i)
@@ -192,7 +202,7 @@ def query_text():
                                      data.get('sort', None)),
                                  offset=int(data.get('offset', 100)),
                                  page=int(data.get('page', 1)))
-    query_result = dao.query(search_model, data.get('show_unlisted'))
+    query_result = get_dao().query(search_model, data.get('show_unlisted'))
     for i in query_result[0]:
         _sanitize_record(i)
     response = _make_paginate_response(query_result, search_model)
@@ -216,7 +226,7 @@ def query_ddo():
         search_model = QueryModel(query={}, sort=data.get('sort'),
                                   offset=data.get('offset', 100),
                                   page=data.get('page', 1))
-    query_result = dao.query(search_model, data.get('show_unlisted'))
+    query_result = get_dao().query(search_model, data.get('show_unlisted'))
     for i in query_result[0]:
         _sanitize_record(i)
     response = _make_paginate_response(query_result, search_model)
@@ -230,13 +240,43 @@ def retire_all():
      swagger_from_file: docs/retire_all.yml
     """
     try:
-        all_ids = [a['id'] for a in dao.get_all_assets()]
+        all_ids = [a['id'] for a in get_dao().get_all_assets()]
         for i in all_ids:
-            dao.delete(i)
+            get_dao().delete(i)
         return 'All ddo successfully deleted', 200
     except Exception as e:
         logger.error(e)
         return 'An error was found', 500
+
+
+def _date_to_datetime(asset):
+    result = copy.deepcopy(asset)
+    result['created'] = datetime.strptime(result['created'], '%Y-%m-%dT%H:%M:%SZ')
+
+
+    for i, service in enumerate(result['service']):
+        if service['type'] == 'metadata':
+            result['service'][i]['attributes']['main']['dateCreated'] = \
+            datetime.strptime(
+                result['service'][i]['attributes']['main']['dateCreated'],
+                '%Y-%m-%dT%H:%M:%SZ')
+
+    return result
+
+
+def _reorder_services(asset):
+    services = []
+    for service in asset['service']:
+        if service['type'] == 'metadata':
+            services.append(service)
+    for service in asset['service']:
+        if service['type'] != 'metadata':
+            services.append(service)
+
+    result = copy.deepcopy(asset)
+    result['service'] = services
+
+    return result
 
 
 def _sanitize_record(data_record):
@@ -305,15 +345,4 @@ def _make_paginate_response(query_list_result, search_model):
 
     result['total_pages'] = int(total / offset) + int(total % offset > 0)
     result['total_results'] = total
-    return result
-
-
-def _reorder_services(services):
-    result = []
-    for service in services:
-        if service['type'] == 'metadata':
-            result.append(service)
-    for service in services:
-        if service['type'] != 'metadata':
-            result.append(service)
     return result

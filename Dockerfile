@@ -1,23 +1,19 @@
-FROM python:3.6-alpine
+FROM python:3.8-slim-buster
 LABEL maintainer="Keyko <root@keyko.io>"
 
 ARG VERSION
 
-RUN apk add --no-cache --update\
-    build-base \
-    gcc \
-    gettext\
-    gmp \
-    gmp-dev \
-    libffi-dev \
-    openssl-dev \
-    py-pip \
-    python3 \
-    python3-dev \
-  && pip install virtualenv
+RUN apt -y update
+RUN apt -y install build-essential gettext-base libpcre3 libpcre3-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -r uwsgi && useradd -r -g uwsgi uwsgi
 
 COPY . /nevermined_metadata
+
+RUN chown -R uwsgi:uwsgi /nevermined_metadata
 WORKDIR /nevermined_metadata
+
 
 # Only install install_requirements, not dev_ or test_requirements
 RUN pip install .
@@ -36,9 +32,10 @@ ENV DB_SECRET=''
 ENV DB_SCHEME='http'
 ENV DB_NAMESPACE='namespace'
 ENV METADATA_URL='http://0.0.0.0:5000'
+ENV METADATA_HOST='0.0.0.0:5000'
 ENV ALLOW_FREE_ASSETS_ONLY='false'
 # docker-entrypoint.sh configuration file variables
-ENV METADATA_WORKERS='1'
+ENV METADATA_WORKERS='4'
 
 ENTRYPOINT ["/nevermined_metadata/docker-entrypoint.sh"]
 

@@ -11,6 +11,12 @@ db.collection = ${DB_COLLECTION}
 ############################################# ELASTIC #############################################
 db.index = ${DB_INDEX}
 
+[metadatadb-external]
+module = ${DB_MODULE_EXTERNAL}
+db.hostname = ${DB_HOSTNAME_EXTERNAL}
+db.port = ${DB_PORT_EXTERNAL}
+db.wallet_file_path = ${DB_WALLET_FILE_PATH_EXTERNAL}
+
 [resources]
 metadata.url = ${METADATA_URL}
 allowFreeAssetsOnly=${ALLOW_FREE_ASSETS_ONLY}
