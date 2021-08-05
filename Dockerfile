@@ -11,13 +11,15 @@ RUN groupadd -r uwsgi && useradd -r -g uwsgi uwsgi
 
 COPY . /nevermined_metadata
 
-WORKDIR /nevermined_metadata
+# uwsgi does not seem to be able to create the folder for the tasks
+RUN mkdir /nevermined_metadata/mytasks || true
+RUN chown -R uwsgi:uwsgi /nevermined_metadata
 
+
+WORKDIR /nevermined_metadata
 
 # Only install install_requirements, not dev_ or test_requirements
 RUN pip install .
-RUN chown -R uwsgi:uwsgi /nevermined_metadata
-
 
 # config.ini configuration file variables
 ENV DB_MODULE='mongodb'
