@@ -48,7 +48,6 @@ def test_status(client, base_ddo_url, json_dict):
     assert status['internal']['type'] == 'Elasticsearch'
     assert status['internal']['status'] == 'ACCEPTED'
     assert status['internal']['url'] == expected_url
-    assert status['external'] is None
 
 
 def test_post_with_no_ddo(client, base_ddo_url, json_dict_no_metadata):
