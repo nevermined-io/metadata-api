@@ -22,7 +22,7 @@ with open('CHANGELOG.md') as history_file:
     'gunicorn==20.1.0',
     'nevermined-metadata-driver-interface>=0.2.0',
     'nevermined-metadata-driver-mongodb>=0.1.0',
-    'nevermined-metadata-driver-elasticsearch>=0.1.3',
+    'nevermined-metadata-driver-elasticsearch>=0.1.4',
     'nevermined-metadata-driver-arweave>=0.1.3',
     'PyYAML==5.4.1',
     'pytz==2021.1',
@@ -75,6 +75,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/nevermined-io/metadata-api',
-    version='0.3.0',
+    version='0.3.1',
     zip_safe=False,
 )
