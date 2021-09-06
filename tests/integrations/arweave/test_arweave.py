@@ -2,8 +2,10 @@ import json
 
 import pytest
 
-pytestmark = pytest.mark.arweave
-
+pytestmark = [
+    pytest.mark.arweave,
+    pytest.mark.skip(reason='Arweave disabled')
+]
 
 def test_create_ddo(client, base_ddo_url, json_dict, dao):
     """Test creation of asset"""
