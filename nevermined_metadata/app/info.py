@@ -15,8 +15,6 @@ info = Blueprint('info', __name__)
 
 @info.route("/")
 def version():
-    # TODO: Add here information about arweave if running
-    print(url_for('assets.get_status', did='asdasd', _external=True))
     config = Config(current_app.config['CONFIG_FILE'])
     info = {
         'software': Metadata.TITLE,

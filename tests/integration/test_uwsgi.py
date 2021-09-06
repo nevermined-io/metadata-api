@@ -7,6 +7,7 @@ import pytest
 pytestmark = pytest.mark.integration
 
 
+@pytest.mark.skip(reason='Arweave disabled')
 def test_update_external_status_slow(dao, base_ddo_url, json_dict):
     r = requests.post(
         f'http://localhost:5000{base_ddo_url}',
