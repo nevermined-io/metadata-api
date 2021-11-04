@@ -91,22 +91,32 @@ def test_update_ddo(client_with_no_data, base_ddo_url, json_before, json_update)
 
 def test_query_metadata(client, base_ddo_url, test_assets):
     assert len(json.loads(client.post(base_ddo_url + '/query',
-                                      data=json.dumps({"query": {}}),
+                                      data=json.dumps({}),
                                       content_type='application/json').data.decode('utf-8'))[
                    'results']) == 2
     assert len(json.loads(client.post(base_ddo_url + '/query',
                                       data=json.dumps(
-                                          {"query": {"price": ["14", "16"]}}),
+                                          { "bool": {"must": [{"range": {
+                                           "service.attributes.main.price": {"gte": 14,
+                                                                             "lte": 16}}}]}}),
                                       content_type='application/json').data.decode('utf-8'))[
-                   'results']) == 1
+                   'results']) == 2
     assert len(json.loads(client.post(base_ddo_url + '/query',
                                       data=json.dumps(
-                                          {"query": {"did": ["did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"]}}),
+                                          {"bool": {
+                                            "should": [{"match": {"_id": "did:nv:"
+                                                                        ":0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"}}
+                                                    ]}}),
                                       content_type='application/json').data.decode('utf-8'))[
-                   'results']) == 1
+                   'results']) == 2
     assert len(json.loads(client.post(base_ddo_url + '/query',
                                       data=json.dumps(
-                                          {"query": {"did": ["did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430", "did:nv:0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e431"]}}),
+                                          {"bool": {
+                                            "should": [{"match": {"_id": "did:nv:"
+                                                                        ":0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e430"}},
+                                                    {"match": {"_id": "did:nv"
+                                                                        ":0c184915b07b44c888d468be85a9b28253e80070e5294b1aaed81c2f0264e431"}}
+                                                    ]}}),
                                       content_type='application/json').data.decode('utf-8'))[
                    'results']) == 2
     assert len(json.loads(client.get(base_ddo_url + '/query?text=Office',
@@ -185,7 +195,9 @@ def test_is_listed(client, base_ddo_url, json_dict, json_dict2):
                ) == 1
     assert len(json.loads(
         client.post(base_ddo_url + '/query',
-                    data=json.dumps({"query": {"price": ["14", "16"]}}),
+                    data=json.dumps({ "bool": {"must": [{"range": {
+                                           "service.attributes.main.price": {"gte": 14,
+                                                                             "lte": 16}}}]}}),
                     content_type='application/json').data.decode('utf-8')
     )['results']) == 1
     assert len(json.loads(
