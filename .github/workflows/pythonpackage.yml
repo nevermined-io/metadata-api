@@ -39,6 +39,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements_dev.txt
+        pip install awscli --ignore-installed six
     - name: Test with pytest
       run: |
         ${{ matrix.tests }}
@@ -70,6 +71,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements_dev.txt
+        pip install awscli --ignore-installed six
 
     - name: Run flask under uwsgi
       run: |
