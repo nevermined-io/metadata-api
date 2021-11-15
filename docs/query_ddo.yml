@@ -15,7 +15,7 @@ parameters:
         query:
           type: string
           description: Query to realize
-          example: {"value":1}
+          example: {"bool": { "must": [{"match": { "service.attributes.additionalInformation.categories": "image" }}]}}
         sort:
           type: object
           description: Key or list of keys to sort the result
