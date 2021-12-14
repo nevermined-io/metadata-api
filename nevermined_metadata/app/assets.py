@@ -252,7 +252,7 @@ def retire_all():
 def _date_to_datetime(asset):
     result = copy.deepcopy(asset)
     result['created'] = datetime.strptime(result['created'], '%Y-%m-%dT%H:%M:%SZ')
-
+    print(result['created'])
 
     for i, service in enumerate(result['service']):
         if service['type'] == 'metadata':
@@ -278,12 +278,21 @@ def _reorder_services(asset):
 
     return result
 
+def _sanitize_date(o):
+    if isinstance(o, datetime):
+        return o.strftime('%Y-%m-%dT%H:%M:%SZ')
+    else:
+        return o + 'Z'
 
 def _sanitize_record(data_record):
     if '_id' in data_record:
         data_record.pop('_id')
+    data_record['created'] = _sanitize_date(data_record['created'])
+    for i, service in enumerate(data_record['service']):
+        if service['type'] == 'metadata':
+            cleaned = _sanitize_date(data_record['service'][i]['attributes']['main']['dateCreated'])
+            data_record['service'][i]['attributes']['main']['dateCreated'] = cleaned
     return json.dumps(data_record, default=_my_converter)
-
 
 def check_required_attributes(required_attributes, data, method):
     assert isinstance(data, dict), 'invalid `body` type, should already formatted into a dict.'
