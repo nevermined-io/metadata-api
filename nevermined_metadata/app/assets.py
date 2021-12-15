@@ -91,7 +91,7 @@ def get_agreement(agreementId):
 
 
 @assets.route("/agreement", methods=["POST"])
-def register():
+def register_agreemet():
     """Register a ServiceAgreement.
     swagger_from_file: docs/register_agreement.yml
     """
