@@ -70,6 +70,47 @@ def get_metadata(did):
         logger.error(e)
         return f'{did} asset DID is not in MetadataDB', 404
 
+@assets.route('/agreement/<agreementId>', methods=['GET'])
+def get_agreement(agreementId):
+    """Get the ServiceAgreement with a particular agreementID
+    swagger_from_file: docs/get_agreement.yml
+    """
+    try:
+        asset_record = get_dao().get(agreementId)
+        return Response(_sanitize_record(asset_record), 200, content_type='application/json')
+    except Exception as e:
+        logger.error(e)
+        return f'{agreementId} agreement is not in the MetadataDB', 404
+
+
+@assets.route('/agreement', methods=['POST'])
+def register():
+    """Register a ServiceAgreement."""
+    assert isinstance(request.json, dict), 'invalid payload format.'
+    required_attributes = ['type', 'index', 'serviceEndpoint', 'templateId','attributes']
+    data = request.json
+    if not data:
+        logger.error(f'request body seems empty.')
+        return 400
+    msg, status = check_required_attributes(required_attributes, data, 'register')
+    if msg:
+        return msg, status
+    # TODO: are these checks necessary?
+    # msg, status = check_no_urls_in_files(_get_main_metadata(data['service']), 'register')
+    # if msg:
+    #     return msg, status
+    # msg, status = validate_date_format(data['created'])
+    # if status:
+    #     return msg, status
+    record = _date_to_datetime(record)
+    try:
+        get_dao().register(record, data['templateId'])
+        # add new assetId to response
+        return Response(_sanitize_record(record), 201, content_type='application/json')
+    except Exception as err:
+        logger.error(f'encounterd an error while saving the ServiceAgreement to MetadataDB: {str(err)}')
+        return f'Some error: {str(err)}', 500
+
 
 @assets.route('/ddo', methods=['POST'])
 def register():
