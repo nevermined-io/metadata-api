@@ -250,3 +250,4 @@ responses:
     description: Invalid asset data.
   500:
     description: Error
+    
