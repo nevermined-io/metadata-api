@@ -85,7 +85,9 @@ def get_agreement(agreementId):
 
 @assets.route('/agreement', methods=['POST'])
 def register():
-    """Register a ServiceAgreement."""
+    """Register a ServiceAgreement.
+    swagger_from_file: docs/register_agreement.yml
+    """
     assert isinstance(request.json, dict), 'invalid payload format.'
     required_attributes = ['type', 'index', 'serviceEndpoint', 'templateId','attributes']
     data = request.json
