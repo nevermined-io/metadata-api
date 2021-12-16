@@ -215,9 +215,9 @@ def test_agreement_creation_and_retrieval(client, base_agreement_url, json_agree
     client.post(base_agreement_url,
                 data=json.dumps(json_agreement),
                 content_type='application/json')
-    print(client.get(base_agreement_url + '/%s' % json_agreement['templateId']).data.decode('utf-8'))
+    print(client.get(base_agreement_url + '/%s' % json_agreement['agreementId']).data.decode('utf-8'))
     assert json.loads(
-        client.get(base_agreement_url + '/%s' % json_agreement['templateId']).data.decode('utf-8'))['index'] == 6
+        client.get(base_agreement_url + '/%s' % json_agreement['agreementId']).data.decode('utf-8'))['price'] == 23
 
 
 def test_date_format_validator():
