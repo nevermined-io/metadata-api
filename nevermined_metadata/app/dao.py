@@ -7,6 +7,7 @@ from flask import current_app, g, url_for
 from metadatadb_driver_interface import MetadataDb
 from metadatadb_driver_interface.search_model import FullTextModel, QueryModel
 from metadatadb_driver_interface.constants import CONFIG_OPTION_EXTERNAL
+from nevermined_metadata.constants import ConfigSections
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ class Dao(object):
 
         self._es = self.metadatadb.driver._es
         self._external_index = CONFIG_OPTION_EXTERNAL
+        self._agreements_index = ConfigSections.AGREEMENTS
         self._init_elasticsearch()
 
 
@@ -188,6 +190,20 @@ class Dao(object):
             id=did
         )['_source']
 
+    def persist_service_agreement(self, agreementId, body):
+        return self._es.index(
+            index=self._agreements_index,
+            id=agreementId,
+            body=body,
+            refresh='wait_for'
+        )[agreementId]
+
+    def get_service_agreement(self, agreementId):
+        return self._es.get(
+            index=self._agreements_index,
+            id=agreementId,
+        )[agreementId]
+
     def _init_elasticsearch(self):
         mapping = {
             'mappings': {
@@ -231,9 +247,22 @@ class Dao(object):
             }
         }
 
+        serviceMapping = {
+            'mappings': {
+                'properties': {
+                    'agreementId': {
+                        'type': 'text'
+                    }
+                }
+            }
+        }
+
         logger.info('Initializing elasticsearch...')
         result = self._es.indices.create(index=self._external_index, ignore=400, body=mapping)
         logger.info(result)
+        resultAgreement = self._es.indices.create(index=self._agreements_index, ignore=400, body=serviceMapping)
+        logger.info(resultAgreement)
+
 
     @staticmethod
     def _datetime_to_date(record):

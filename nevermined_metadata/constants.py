@@ -2,6 +2,7 @@ class ConfigSections:
     METADATADB = 'metadatadb'
     RESOURCES = 'resources'
     EXTERNAL = 'metadatadb-external'
+    AGREEMENTS = 'service-agreements'
 
 
 class BaseURLs:

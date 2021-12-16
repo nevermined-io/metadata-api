@@ -81,7 +81,7 @@ def get_agreement(agreementId):
     swagger_from_file: docs/get_agreement.yml
     """
     try:
-        asset_record = get_dao().get(agreementId)
+        asset_record = get_dao().get_service_agreement(agreementId)
         return Response(
             _sanitize_record(asset_record), 200, content_type='application/json'
         )
@@ -118,7 +118,7 @@ def register_agreemet():
     # if status:
     #     return msg, status
     try:
-        get_dao().register(data, data['templateId'])
+        get_dao().persist_service_agreement(data['templateId'], data)
         # add new assetId to response
         return Response(_sanitize_record(data), 201, content_type='application/json')
     except Exception as err:
