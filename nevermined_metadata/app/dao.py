@@ -191,17 +191,15 @@ class Dao(object):
         )['_source']
 
     def persist_service_agreement(self, agreementId, body):
-        return self.metadatadb.write(
-            index=self._agreements_index,
-            id=agreementId,
-            body=body
-        )['_id']
+        logger.info('Submitted %s to %s with id %s', agreementId,
+                self.metadatadb.type)
+        return self.metadatadb.write(body, agreementId)
 
     def get_service_agreement(self, agreementId):
         return self._es.get(
             index=self._agreements_index,
             id=agreementId,
-        )['_id']
+        )['agreement']
 
     def _init_elasticsearch(self):
         mapping = {
@@ -248,13 +246,26 @@ class Dao(object):
 
         serviceMapping = {
             'mappings': {
-                'properties': {
-                    'id': {
-                        'type': 'text'
-                    }
-                },
                 'agreement': {
                     'dynamic': 'true',
+                    'properties': {
+                        'type': {
+                            'type': 'text'
+                        },
+                        'index': {
+                            'type': 'long'
+                        },
+                        'serviceEndpoint': {
+                            'type': 'text'
+                        },
+                        'templateId': {
+                            'type': 'text'
+                        },
+                        'attributes': {
+                            'type': 'object',
+                            'dynamic': 'true'
+                        }
+                    }
                 }
             }
         }
