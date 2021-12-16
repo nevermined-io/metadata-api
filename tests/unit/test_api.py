@@ -211,6 +211,13 @@ def test_is_listed(client, base_ddo_url, json_dict, json_dict2):
                     content_type='application/json').data.decode('utf-8')
     )['results']) == 2
 
+def test_agreement_creation_and_retrieval(client, base_agreement_url, json_agreement):
+    client.post(base_agreement_url,
+                data=json.dumps(json_agreement),
+                content_type='application/json')
+    assert len(json.loads(
+        client.get(base_agreement_url + '/%s' % json_agreement['templateId']).data.decode('utf-8'))['index']) == 0
+
 
 def test_date_format_validator():
     date = '2016-02-08T16:02:20Z'
