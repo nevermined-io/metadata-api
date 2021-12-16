@@ -192,13 +192,10 @@ class Dao(object):
 
     def persist_service_agreement(self, agreementId, body):
         logger.info('Submitted to %s with id %s', self.metadatadb.type,agreementId)
-        return self._es.write(body, agreementId)
+        return self.metadatadb.write(body, agreementId)
 
     def get_service_agreement(self, agreementId):
-        return self._es.get(
-            index=self._agreements_index,
-            id=agreementId,
-        )['agreement']
+        return self.metadatadb.read(agreementId)
 
     def _init_elasticsearch(self):
         mapping = {
