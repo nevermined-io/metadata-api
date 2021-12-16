@@ -97,11 +97,11 @@ def register_agreemet():
     """
     assert isinstance(request.json, dict), 'invalid payload format.'
     required_attributes = [
-        'type',
-        'index',
-        'serviceEndpoint',
-        'templateId',
-        'attributes',
+        'agreementId',
+        'did',
+        'publisher',
+        'price',
+        'tokenAddress',
     ]
     data = request.json
     if not data:
