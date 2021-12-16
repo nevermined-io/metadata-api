@@ -191,7 +191,7 @@ class Dao(object):
         )['_source']
 
     def persist_service_agreement(self, agreementId, body):
-        logger.info('Submitted %s to %s with id %s', agreementId,
+        logger.info('Submitted to %s with id %s', agreementId,
                 self.metadatadb.type)
         return self.metadatadb.write(body, agreementId)
 
