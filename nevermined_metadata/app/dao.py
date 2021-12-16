@@ -196,13 +196,13 @@ class Dao(object):
             id=agreementId,
             body=body,
             refresh='wait_for'
-        )['_id']
+        )['agreement']
 
     def get_service_agreement(self, agreementId):
         return self._es.get(
             index=self._agreements_index,
             id=agreementId,
-        )['_id']
+        )['agreement']
 
     def _init_elasticsearch(self):
         mapping = {
@@ -249,10 +249,8 @@ class Dao(object):
 
         serviceMapping = {
             'mappings': {
-                'properties': {
-                    'agreementId': {
-                        'type': 'text'
-                    }
+                'agreement': {
+                    'dynamic': 'true',
                 }
             }
         }
