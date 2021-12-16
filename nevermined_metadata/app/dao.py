@@ -191,11 +191,10 @@ class Dao(object):
         )['_source']
 
     def persist_service_agreement(self, agreementId, body):
-        return self._es.index(
+        return self.metadatadb.write(
             index=self._agreements_index,
             id=agreementId,
-            body=body,
-            refresh='wait_for'
+            body=body
         )['_id']
 
     def get_service_agreement(self, agreementId):
