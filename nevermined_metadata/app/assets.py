@@ -82,12 +82,14 @@ def get_service(serviceId):
     """
     try:
         asset_record = get_dao().get_service(serviceId)
+        if not asset_record:
+            return f'{serviceId} serviceId is not in MetadataDB', 404
         return Response(
             _sanitize_record(asset_record), 200, content_type='application/json'
         )
     except Exception as e:
         logger.error(e)
-        return f'{serviceId} service is not in the MetadataDB', 404
+        return f'An exception happened during fetching of {serviceId} service.', 500
 
 
 @assets.route('/service', methods=['POST'])
