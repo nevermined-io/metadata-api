@@ -228,3 +228,7 @@ def test_invalid_date():
     date = 'XXXX'
     assert validate_date_format(date) == (
         "Incorrect data format, should be '%Y-%m-%dT%H:%M:%SZ'", 400)
+
+def test_swagger_spec(client, base_service_url):
+    response = client.get('/spec')
+    assert response.status_code == 200
