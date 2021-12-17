@@ -75,28 +75,29 @@ def get_metadata(did):
         return f'{did} asset DID is not in MetadataDB', 404
 
 
-@assets.route('/agreement/<agreementId>', methods=['GET'])
-def get_agreement(agreementId):
-    """Get the ServiceAgreement with a particular agreementID
-    swagger_from_file: docs/get_agreement.yml
+@assets.route('/service/<serviceId>', methods=['GET'])
+def get_service(serviceId):
+    """Get the Service with a particular serviceId
+    swagger_from_file: docs/get_service.yml
     """
     try:
-        asset_record = get_dao().get_service_agreement(agreementId)
+        asset_record = get_dao().get_service(serviceId)
         return Response(
             _sanitize_record(asset_record), 200, content_type='application/json'
         )
     except Exception as e:
         logger.error(e)
-        return f'{agreementId} agreement is not in the MetadataDB', 404
+        return f'{serviceId} service is not in the MetadataDB', 404
 
 
-@assets.route('/agreement', methods=['POST'])
-def register_agreemet():
-    """Register a ServiceAgreement.
-    swagger_from_file: docs/register_agreement.yml
+@assets.route('/service', methods=['POST'])
+def register_service():
+    """Register a Service.
+    swagger_from_file: docs/register_service.yml
     """
     assert isinstance(request.json, dict), 'invalid payload format.'
     required_attributes = [
+        'agreementId',
         'type',
         'index',
         'serviceEndpoint',
@@ -110,20 +111,13 @@ def register_agreemet():
     msg, status = check_required_attributes(required_attributes, data, 'register')
     if msg:
         return msg, status
-    # TODO: are these checks necessary?
-    # msg, status = check_no_urls_in_files(_get_main_metadata(data['service']), 'register')
-    # if msg:
-    #     return msg, status
-    # msg, status = validate_date_format(data['created'])
-    # if status:
-    #     return msg, status
     try:
-        get_dao().persist_service_agreement(data['templateId'], data)
+        get_dao().persist_service(data['agreementId'], data)
         # add new assetId to response
         return Response(_sanitize_record(data), 201, content_type='application/json')
     except Exception as err:
         logger.error(
-            f'encounterd an error while saving the ServiceAgreement to MetadataDB: {str(err)}'
+            f'encounterd an error while saving the Service to MetadataDB: {str(err)}'
         )
         return f'Some error: {str(err)}', 500
 

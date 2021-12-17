@@ -1,4 +1,4 @@
-Register a ServiceAgreement into MetadataDB
+Register a Service into MetadataDB
 ---
 tags:
   - agreement
@@ -18,6 +18,10 @@ parameters:
         - templateId
         - attribures
       properties:
+        agreementId:
+          type: string
+          description: The unique ID of the template.
+          example: "0xD3587931B2657a1f97bFD004A659d7D592318332"
         type:
           description: The type of the agreement(nft-sames, nft-access, etc.)
           example: nft-sales
@@ -32,7 +36,7 @@ parameters:
           type: string
         templateId:
               type: string
-              description: The unique ID of the template.
+              description: The underlying template ID.
               example: "0xD3587931B2657a1f97bFD004A659d7D592318332"
         attributes:
               type: dictionary

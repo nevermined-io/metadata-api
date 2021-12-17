@@ -25,7 +25,7 @@ class Dao(object):
 
         self._es = self.metadatadb.driver._es
         self._external_index = CONFIG_OPTION_EXTERNAL
-        self._agreements_index = ConfigSections.AGREEMENTS
+        self._service_index = ConfigSections.SERVICE
         self._init_elasticsearch()
 
 
@@ -190,12 +190,12 @@ class Dao(object):
             id=did
         )['_source']
 
-    def persist_service_agreement(self, agreementId, body):
-        logger.info('Submitted to %s with id %s', self.metadatadb.type,agreementId)
-        return self.metadatadb.write(body, agreementId)
+    def persist_service(self, serviceId, body):
+        logger.info('Submitted to %s with id %s', self.metadatadb.type,serviceId)
+        return self.metadatadb.write(body, serviceId)
 
-    def get_service_agreement(self, agreementId):
-        return self.metadatadb.read(agreementId)
+    def get_service(self, serviceId):
+        return self.metadatadb.read(serviceId)
 
     def _init_elasticsearch(self):
         mapping = {
@@ -242,25 +242,26 @@ class Dao(object):
 
         serviceMapping = {
             'mappings': {
-                'agreement': {
-                    'dynamic': 'true',
-                    'properties': {
-                        'type': {
-                            'type': 'text'
-                        },
-                        'index': {
-                            'type': 'long'
-                        },
-                        'serviceEndpoint': {
-                            'type': 'text'
-                        },
-                        'templateId': {
-                            'type': 'text'
-                        },
-                        'attributes': {
+                'properties': {
+                    'type': {
+                        'type': 'text'
+                    },
+                    'index': {
+                        'type': 'long'
+                    },
+                    'serviceEndpoint': {
+                        'type': 'text'
+                    },
+                    'templateId': {
+                        'type': 'text'
+                    },
+                    'attributes': {
+                        'type': 'object',
+                        'main': {
                             'type': 'object',
                             'dynamic': 'true'
-                        }
+                        },
+                        'dynamic': 'true'
                     }
                 }
             }
@@ -269,8 +270,8 @@ class Dao(object):
         logger.info('Initializing elasticsearch...')
         result = self._es.indices.create(index=self._external_index, ignore=400, body=mapping)
         logger.info(result)
-        resultAgreement = self._es.indices.create(index=self._agreements_index, ignore=400, body=serviceMapping)
-        logger.info(resultAgreement)
+        resultService = self._es.indices.create(index=self._service_index, ignore=400, body=serviceMapping)
+        logger.info(resultService)
 
 
     @staticmethod
