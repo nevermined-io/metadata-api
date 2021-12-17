@@ -243,21 +243,23 @@ class Dao(object):
         serviceMapping = {
             'mappings': {
                 'agreement': {
+                    'dynamic': 'true',
                     'properties': {
-                        'agreementId': {
+                        'type': {
                             'type': 'text'
                         },
-                        'did': {
-                            'type': 'text'
-                        },
-                        'publisher': {
-                            'type': 'text'
-                        },
-                        'price': {
+                        'index': {
                             'type': 'long'
                         },
-                        'tokenAddress': {
+                        'serviceEndpoint': {
                             'type': 'text'
+                        },
+                        'templateId': {
+                            'type': 'text'
+                        },
+                        'attributes': {
+                            'type': 'object',
+                            'dynamic': 'true'
                         }
                     }
                 }
