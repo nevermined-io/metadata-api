@@ -110,8 +110,15 @@ def register_agreemet():
     msg, status = check_required_attributes(required_attributes, data, 'register')
     if msg:
         return msg, status
+    # TODO: are these checks necessary?
+    # msg, status = check_no_urls_in_files(_get_main_metadata(data['service']), 'register')
+    # if msg:
+    #     return msg, status
+    # msg, status = validate_date_format(data['created'])
+    # if status:
+    #     return msg, status
     try:
-        get_dao().persist_service_agreement(data['agreementId'], data)
+        get_dao().persist_service_agreement(data['templateId'], data)
         # add new assetId to response
         return Response(_sanitize_record(data), 201, content_type='application/json')
     except Exception as err:
