@@ -246,9 +246,6 @@ class Dao(object):
                     'agreementId': {
                         'type': 'text'
                     },
-                    'dateCreated': {
-                        'type': 'date'
-                    },
                     'did': {
                         'type': 'text'
                     },

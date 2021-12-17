@@ -23,13 +23,9 @@ parameters:
           example: "0xD3587931B2657a1f97bFD004A659d7D592318332"
           type: string
         did:
-          description: The decentralized ID of the asset.
+          description: The decentralized ID of the asset
           example: "did:nv:0xD3587931B2657a1f97bFD004A659d7D592318332"
           type: string
-        dateCreated:
-          description: The timestamp of the creation in UTC.
-          example: 2021-12-13T16:11:08Z
-          type: date
         publisher:
           description: The address of the asset's publisher.
           example: "0xD3587931B2657a1f97bFD004A659d7D592318332"
