@@ -242,21 +242,23 @@ class Dao(object):
 
         serviceMapping = {
             'mappings': {
-                'properties': {
-                    'agreementId': {
-                        'type': 'text'
-                    },
-                    'did': {
-                        'type': 'text'
-                    },
-                    'publisher': {
-                        'type': 'text'
-                    },
-                    'price': {
-                        'type': 'long'
-                    },
-                    'tokenAddress': {
-                        'type': 'text'
+                'agreement': {
+                    'properties': {
+                        'agreementId': {
+                            'type': 'text'
+                        },
+                        'did': {
+                            'type': 'text'
+                        },
+                        'publisher': {
+                            'type': 'text'
+                        },
+                        'price': {
+                            'type': 'long'
+                        },
+                        'tokenAddress': {
+                            'type': 'text'
+                        }
                     }
                 }
             }
@@ -265,9 +267,8 @@ class Dao(object):
         logger.info('Initializing elasticsearch...')
         result = self._es.indices.create(index=self._external_index, ignore=400, body=mapping)
         logger.info(result)
-        logger.info(f'Created index {str(result)}')
         resultAgreement = self._es.indices.create(index=self._agreements_index, ignore=400, body=serviceMapping)
-        logger.info(f'Created index {str(resultAgreement)}')
+        logger.info(resultAgreement)
 
 
     @staticmethod
