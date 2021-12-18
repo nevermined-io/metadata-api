@@ -1,7 +1,7 @@
 Register a Service into MetadataDB
 ---
 tags:
-  - agreement
+  - service
 consumes:
   - application/json
 parameters:
@@ -12,15 +12,16 @@ parameters:
     schema:
       type: object
       required:
+        - agreementId
         - type
         - index
         - serviceEndpoint
         - templateId
-        - attribures
+        - attributes
       properties:
         agreementId:
           type: string
-          description: The unique ID of the template.
+          description: The unique ID of the service agreement.
           example: "0xD3587931B2657a1f97bFD004A659d7D592318332"
         type:
           description: The type of the agreement(nft-sames, nft-access, etc.)

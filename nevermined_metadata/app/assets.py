@@ -114,7 +114,8 @@ def register_service():
     if msg:
         return msg, status
     try:
-        get_dao().persist_service(data['agreementId'], data)
+        agreement_id = data.pop('agreementId')
+        get_dao().persist_service(agreement_id, data)
         # add new assetId to response
         return Response(_sanitize_record(data), 201, content_type='application/json')
     except Exception as err:
