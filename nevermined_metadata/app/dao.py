@@ -190,12 +190,21 @@ class Dao(object):
             id=did
         )['_source']
 
-    def persist_service(self, serviceId, body):
-        logger.info('Submitted to %s with id %s', self.metadatadb.type,serviceId)
-        return self.metadatadb.write(body, serviceId)
+    def persist_service(self, service_id, body):
+        logger.info('Submitted to %s with id %s', self.metadatadb.type,service_id)
+        return self._es.index(
+            index=self._service_index,
+            id=service_id,
+            body=body,
+            doc_type='_doc',
+            refresh='wait_for'
+        )['_id']
 
-    def get_service(self, serviceId):
-        return self.metadatadb.read(serviceId)
+    def get_service(self, service_id):
+        return self._es.get(
+            index=self._service_index,
+            id=service_id
+        )['_source']
 
     def _init_elasticsearch(self):
         mapping = {
@@ -257,9 +266,11 @@ class Dao(object):
                     },
                     'attributes': {
                         'type': 'object',
-                        'main': {
-                            'type': 'object',
-                            'dynamic': 'true'
+                        'properties': {
+                            'main': {
+                                'type': 'object',
+                                'dynamic': 'true'
+                            },
                         },
                         'dynamic': 'true'
                     }
