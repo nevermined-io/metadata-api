@@ -101,6 +101,8 @@ def query_service():
     assert isinstance(query_model, dict), 'invalid `body` type, should be formatted as a dict.'
     
     query_result = get_dao().query_service(query_model)
+    if not query_result:
+        return 'No results found', 404
     for i in query_result[0]:
         _sanitize_record(i)
     return Response(

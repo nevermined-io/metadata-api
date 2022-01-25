@@ -225,7 +225,7 @@ def test_service_creation_and_query(client, base_service_url, json_service):
     assert len(json.loads(
          client.post(base_service_url + '/query',
                     data=json.dumps({"query": {"match_all": {}}}),
-                    content_type='application/json').data.decode('utf-8'))['results']) == 1
+                    content_type='application/json').data.decode('utf-8'))) == 1
 
 
 def test_date_format_validator():
