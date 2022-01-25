@@ -39,7 +39,9 @@ def get_ddo(did):
     """
     try:
         asset_record = get_dao().get(did)
-        return Response(_sanitize_record(asset_record), 200, content_type='application/json')
+        return Response(
+            _sanitize_record(asset_record), 200, content_type='application/json'
+        )
     except Exception as e:
         logger.error(e)
         return f'{did} asset DID is not in MetadataDB', 404
@@ -65,10 +67,62 @@ def get_metadata(did):
     try:
         asset_record = get_dao().get(did)
         metadata = _get_metadata(asset_record['service'])
-        return Response(_sanitize_record(metadata), 200, content_type='application/json')
+        return Response(
+            _sanitize_record(metadata), 200, content_type='application/json'
+        )
     except Exception as e:
         logger.error(e)
         return f'{did} asset DID is not in MetadataDB', 404
+
+
+@assets.route('/service/<serviceId>', methods=['GET'])
+def get_service(serviceId):
+    """Get the Service with a particular serviceId
+    swagger_from_file: docs/get_service.yml
+    """
+    try:
+        asset_record = get_dao().get_service(serviceId)
+        if not asset_record:
+            return f'{serviceId} serviceId is not in MetadataDB', 404
+        return Response(
+            _sanitize_record(asset_record), 200, content_type='application/json'
+        )
+    except Exception as e:
+        logger.error(e)
+        return f'An exception happened during fetching of {serviceId} service.', 500
+
+
+@assets.route('/service', methods=['POST'])
+def register_service():
+    """Register a Service.
+    swagger_from_file: docs/register_service.yml
+    """
+    assert isinstance(request.json, dict), 'invalid payload format.'
+    required_attributes = [
+        'agreementId',
+        'type',
+        'index',
+        'serviceEndpoint',
+        'templateId',
+        'attributes',
+    ]
+    data = request.json
+    if not data:
+        logger.error(f'request body seems empty.')
+        return 400
+    msg, status = check_required_attributes(required_attributes, data, 'register')
+    if msg:
+        return msg, status
+    try:
+        agreement_id = data.pop('agreementId')
+        get_dao().persist_service(agreement_id, data)
+        # add new assetId to response
+        return Response(_sanitize_record(data), 201, content_type='application/json')
+    except Exception as err:
+        logger.error(
+            f'encounterd an error while saving the Service to MetadataDB: {str(err)}'
+        )
+        return f'Some error: {str(err)}', 500
 
 
 @assets.route('/ddo', methods=['POST'])
@@ -77,8 +131,15 @@ def register():
     swagger_from_file: docs/register.yml
     """
     assert isinstance(request.json, dict), 'invalid payload format.'
-    required_attributes = ['@context', 'created', 'id', 'publicKey', 'authentication', 'proof',
-                           'service']
+    required_attributes = [
+        '@context',
+        'created',
+        'id',
+        'publicKey',
+        'authentication',
+        'proof',
+        'service',
+    ]
     data = request.json
     if not data:
         logger.error(f'request body seems empty.')
@@ -86,7 +147,9 @@ def register():
     msg, status = check_required_attributes(required_attributes, data, 'register')
     if msg:
         return msg, status
-    msg, status = check_no_urls_in_files(_get_main_metadata(data['service']), 'register')
+    msg, status = check_no_urls_in_files(
+        _get_main_metadata(data['service']), 'register'
+    )
     if msg:
         return msg, status
     msg, status = validate_date_format(data['created'])
@@ -98,9 +161,16 @@ def register():
 
     for i, service in enumerate(record['service']):
         if service['type'] == 'metadata':
-            if Config(filename=current_app.config['CONFIG_FILE']).allow_free_assets_only == 'true':
+            if (
+                Config(
+                    filename=current_app.config['CONFIG_FILE']
+                ).allow_free_assets_only
+                == 'true'
+            ):
                 if record['service'][i]['attributes']['main']['price'] != "0":
-                    logger.warning('Priced assets are not supported in this marketplace')
+                    logger.warning(
+                        'Priced assets are not supported in this marketplace'
+                    )
                     return 'Priced assets are not supported in this marketplace', 400
             record['service'][i]['attributes']['curation'] = {}
             record['service'][i]['attributes']['curation']['rating'] = 0.00
@@ -111,7 +181,9 @@ def register():
         # add new assetId to response
         return Response(_sanitize_record(record), 201, content_type='application/json')
     except Exception as err:
-        logger.error(f'encountred an error while saving the asset data to MetadataDB: {str(err)}')
+        logger.error(
+            f'encountred an error while saving the asset data to MetadataDB: {str(err)}'
+        )
         return f'Some error: {str(err)}', 500
 
 
@@ -120,8 +192,15 @@ def update(did):
     """Update DDO of an existing asset
     swagger_from_file: docs/update.yml
     """
-    required_attributes = ['@context', 'created', 'id', 'publicKey', 'authentication', 'proof',
-                           'service']
+    required_attributes = [
+        '@context',
+        'created',
+        'id',
+        'publicKey',
+        'authentication',
+        'proof',
+        'service',
+    ]
     assert isinstance(request.json, dict), 'invalid payload format.'
     data = request.json
     if not data:
@@ -130,7 +209,9 @@ def update(did):
     msg, status = check_required_attributes(required_attributes, data, 'update')
     if msg:
         return msg, status
-    msg, status = check_no_urls_in_files(_get_main_metadata(data['service']), 'register')
+    msg, status = check_no_urls_in_files(
+        _get_main_metadata(data['service']), 'register'
+    )
     if msg:
         return msg, status
     msg, status = validate_date_format(data['created'])
@@ -143,10 +224,20 @@ def update(did):
     try:
         for service in record['service']:
             if service['type'] == 'metadata':
-                if Config(filename=current_app.config['CONFIG_FILE']).allow_free_assets_only == 'true':
+                if (
+                    Config(
+                        filename=current_app.config['CONFIG_FILE']
+                    ).allow_free_assets_only
+                    == 'true'
+                ):
                     if record['service'][0]['attributes']['main']['price'] != "0":
-                        logger.warning('Priced assets are not supported in this marketplace')
-                        return 'Priced assets are not supported in this marketplace', 400
+                        logger.warning(
+                            'Priced assets are not supported in this marketplace'
+                        )
+                        return (
+                            'Priced assets are not supported in this marketplace',
+                            400,
+                        )
         get_dao().update(record, did)
         return Response(_sanitize_record(record), 200, content_type='application/json')
     except MetadataDbError as e:
@@ -186,58 +277,78 @@ def get_asset_ddos():
     assets_metadata = {a['id']: a for a in assets_with_id}
     for i in assets_metadata:
         _sanitize_record(i)
-    return Response(json.dumps(assets_metadata, default=_my_converter), 200,
-                    content_type='application/json')
+    return Response(
+        json.dumps(assets_metadata, default=_my_converter),
+        200,
+        content_type='application/json',
+    )
 
 
 @assets.route('/ddo/query', methods=['GET'])
 def query_text():
     """Get a list of DDOs that match with the given text.
-     swagger_from_file: docs/query_text.yml
+    swagger_from_file: docs/query_text.yml
     """
     data = request.args
-    assert isinstance(data, dict), 'invalid `args` type, should already formatted into a dict.'
-    search_model = FullTextModel(text=data.get('text', None),
-                                 sort=None if data.get('sort', None) is None else json.loads(
-                                     data.get('sort', None)),
-                                 offset=int(data.get('offset', 100)),
-                                 page=int(data.get('page', 1)))
+    assert isinstance(
+        data, dict
+    ), 'invalid `args` type, should already formatted into a dict.'
+    search_model = FullTextModel(
+        text=data.get('text', None),
+        sort=None
+        if data.get('sort', None) is None
+        else json.loads(data.get('sort', None)),
+        offset=int(data.get('offset', 100)),
+        page=int(data.get('page', 1)),
+    )
     query_result = get_dao().query(search_model, data.get('show_unlisted'))
     for i in query_result[0]:
         _sanitize_record(i)
     response = _make_paginate_response(query_result, search_model)
-    return Response(json.dumps(response, default=_my_converter), 200,
-                    content_type='application/json')
+    return Response(
+        json.dumps(response, default=_my_converter),
+        200,
+        content_type='application/json',
+    )
 
 
 @assets.route('/ddo/query', methods=['POST'])
 def query_ddo():
     """Get a list of DDOs that match with the executed query.
-     swagger_from_file: docs/query_ddo.yml
+    swagger_from_file: docs/query_ddo.yml
     """
     assert isinstance(request.json, dict), 'invalid payload format.'
     data = request.json
     assert isinstance(data, dict), 'invalid `body` type, should be formatted as a dict.'
     if 'query' in data:
-        search_model = QueryModel(query=data.get('query'), sort=data.get('sort'),
-                                  offset=data.get('offset', 100),
-                                  page=data.get('page', 1))
+        search_model = QueryModel(
+            query=data.get('query'),
+            sort=data.get('sort'),
+            offset=data.get('offset', 100),
+            page=data.get('page', 1),
+        )
     else:
-        search_model = QueryModel(query={}, sort=data.get('sort'),
-                                  offset=data.get('offset', 100),
-                                  page=data.get('page', 1))
+        search_model = QueryModel(
+            query={},
+            sort=data.get('sort'),
+            offset=data.get('offset', 100),
+            page=data.get('page', 1),
+        )
     query_result = get_dao().query(search_model, data.get('show_unlisted'))
     for i in query_result[0]:
         _sanitize_record(i)
     response = _make_paginate_response(query_result, search_model)
-    return Response(json.dumps(response, default=_my_converter), 200,
-                    content_type='application/json')
+    return Response(
+        json.dumps(response, default=_my_converter),
+        200,
+        content_type='application/json',
+    )
 
 
 @assets.route('/ddo', methods=['DELETE'])
 def retire_all():
     """Retire metadata of all the assets.
-     swagger_from_file: docs/retire_all.yml
+    swagger_from_file: docs/retire_all.yml
     """
     try:
         all_ids = [a['id'] for a in get_dao().get_all_assets()]
@@ -256,10 +367,12 @@ def _date_to_datetime(asset):
 
     for i, service in enumerate(result['service']):
         if service['type'] == 'metadata':
-            result['service'][i]['attributes']['main']['dateCreated'] = \
-            datetime.strptime(
+            result['service'][i]['attributes']['main'][
+                'dateCreated'
+            ] = datetime.strptime(
                 result['service'][i]['attributes']['main']['dateCreated'],
-                '%Y-%m-%dT%H:%M:%SZ')
+                '%Y-%m-%dT%H:%M:%SZ',
+            )
 
     return result
 
@@ -295,7 +408,9 @@ def _sanitize_record(data_record):
     return json.dumps(data_record, default=_my_converter)
 
 def check_required_attributes(required_attributes, data, method):
-    assert isinstance(data, dict), 'invalid `body` type, should already formatted into a dict.'
+    assert isinstance(
+        data, dict
+    ), 'invalid `body` type, should already formatted into a dict.'
     logger.info('got %s request: %s' % (method, data))
     if not data:
         logger.error('%s request failed: data is empty.' % method)
@@ -303,7 +418,9 @@ def check_required_attributes(required_attributes, data, method):
         return 'payload seems empty.', 400
     for attr in required_attributes:
         if attr not in data:
-            logger.error('%s request failed: required attr %s missing.' % (method, attr))
+            logger.error(
+                '%s request failed: required attr %s missing.' % (method, attr)
+            )
             return '"%s" is required in the call to %s' % (attr, method), 400
     return None, None
 

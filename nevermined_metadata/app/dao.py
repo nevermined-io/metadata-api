@@ -7,6 +7,7 @@ from flask import current_app, g, url_for
 from metadatadb_driver_interface import MetadataDb
 from metadatadb_driver_interface.search_model import FullTextModel, QueryModel
 from metadatadb_driver_interface.constants import CONFIG_OPTION_EXTERNAL
+from nevermined_metadata.constants import ConfigSections
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ class Dao(object):
 
         self._es = self.metadatadb.driver._es
         self._external_index = CONFIG_OPTION_EXTERNAL
+        self._service_index = ConfigSections.SERVICE
         self._init_elasticsearch()
 
 
@@ -188,6 +190,22 @@ class Dao(object):
             id=did
         )['_source']
 
+    def persist_service(self, service_id, body):
+        logger.info('Submitted to %s with id %s', self.metadatadb.type,service_id)
+        return self._es.index(
+            index=self._service_index,
+            id=service_id,
+            body=body,
+            doc_type='_doc',
+            refresh='wait_for'
+        )['_id']
+
+    def get_service(self, service_id):
+        return self._es.get(
+            index=self._service_index,
+            id=service_id
+        )['_source']
+
     def _init_elasticsearch(self):
         mapping = {
             'mappings': {
@@ -231,9 +249,41 @@ class Dao(object):
             }
         }
 
+        serviceMapping = {
+            'mappings': {
+                'properties': {
+                    'type': {
+                        'type': 'text'
+                    },
+                    'index': {
+                        'type': 'long'
+                    },
+                    'serviceEndpoint': {
+                        'type': 'text'
+                    },
+                    'templateId': {
+                        'type': 'text'
+                    },
+                    'attributes': {
+                        'type': 'object',
+                        'properties': {
+                            'main': {
+                                'type': 'object',
+                                'dynamic': 'true'
+                            },
+                        },
+                        'dynamic': 'true'
+                    }
+                }
+            }
+        }
+
         logger.info('Initializing elasticsearch...')
         result = self._es.indices.create(index=self._external_index, ignore=400, body=mapping)
         logger.info(result)
+        resultService = self._es.indices.create(index=self._service_index, ignore=400, body=serviceMapping)
+        logger.info(resultService)
+
 
     @staticmethod
     def _datetime_to_date(record):

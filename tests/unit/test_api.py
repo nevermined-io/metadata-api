@@ -211,6 +211,13 @@ def test_is_listed(client, base_ddo_url, json_dict, json_dict2):
                     content_type='application/json').data.decode('utf-8')
     )['results']) == 2
 
+def test_service_creation_and_retrieval(client, base_service_url, json_service):
+    client.post(base_service_url,
+                data=json.dumps(json_service),
+                content_type='application/json')
+    assert json.loads(
+        client.get(base_service_url + '/%s' % json_service['agreementId']).data.decode('utf-8'))['index'] == 6
+
 
 def test_date_format_validator():
     date = '2016-02-08T16:02:20Z'
@@ -221,3 +228,7 @@ def test_invalid_date():
     date = 'XXXX'
     assert validate_date_format(date) == (
         "Incorrect data format, should be '%Y-%m-%dT%H:%M:%SZ'", 400)
+
+def test_swagger_spec(client, base_service_url):
+    response = client.get('/spec')
+    assert response.status_code == 200
