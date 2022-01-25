@@ -224,7 +224,7 @@ def test_service_creation_and_query(client, base_service_url, json_service):
                 content_type='application/json')
     assert len(json.loads(
          client.post(base_service_url + '/query',
-                    data=json.dumps({"query": {}}),
+                    data=json.dumps({}),
                     content_type='application/json').data.decode('utf-8'))['results']) == 1
 
 
