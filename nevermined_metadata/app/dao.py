@@ -208,12 +208,11 @@ class Dao(object):
 
     def query_service(self, query):
         query_list = []
-        res = self._es.search(index=self._service_index, query=query)
+        res = self._es.search(index=self._service_index, body=query)
         print("Got %d Hits:" % res['hits']['total']['value'])
         if 'hits' not in res:
             return
         for hit in res['hits']['hits']:
-            print("%(timestamp)s %(author)s: %(text)s" % hit["_source"])
             query_list.append(hit['_source'])
         return query_list
 
