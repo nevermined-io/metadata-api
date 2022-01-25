@@ -111,7 +111,7 @@ def register():
         # add new assetId to response
         return Response(_sanitize_record(record), 201, content_type='application/json')
     except Exception as err:
-        logger.error(f'encounterd an error while saving the asset data to MetadataDB: {str(err)}')
+        logger.error(f'encountred an error while saving the asset data to MetadataDB: {str(err)}')
         return f'Some error: {str(err)}', 500
 
 
