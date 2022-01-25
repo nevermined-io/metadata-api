@@ -258,6 +258,9 @@ class Dao(object):
                     'index': {
                         'type': 'long'
                     },
+                    'did': {
+                        'type': 'text'
+                    },
                     'serviceEndpoint': {
                         'type': 'text'
                     },

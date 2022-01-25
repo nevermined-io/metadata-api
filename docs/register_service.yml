@@ -39,6 +39,10 @@ parameters:
               type: string
               description: The underlying template ID.
               example: "0xD3587931B2657a1f97bFD004A659d7D592318332"
+        did:
+          type: string
+          description: The DID of the associated asset.
+          example: "did:nv:249218ab779e6a16cd3ea1c630e7d97531343a1271cd5c16921e2491a65248c9"
         attributes:
               type: object
               additionalProperties: true
