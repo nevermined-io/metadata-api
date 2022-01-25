@@ -56,7 +56,7 @@ def get_status(did):
         return Response(_sanitize_record(status), 200, content_type='application/json')
     except Exception as e:
         logger.error('Error fetching the status of %s: %s', did, str(e))
-        return f'Error fetching the satus of {did}: {str(e)}', 500
+        return f'Error fetching the status of {did}: {str(e)}', 500
 
 
 @assets.route('/metadata/<did>', methods=['GET'])
@@ -120,7 +120,7 @@ def register_service():
         return Response(_sanitize_record(data), 201, content_type='application/json')
     except Exception as err:
         logger.error(
-            f'encounterd an error while saving the Service to MetadataDB: {str(err)}'
+            f'encountered an error while saving the Service to MetadataDB: {str(err)}'
         )
         return f'Some error: {str(err)}', 500
 
@@ -182,7 +182,7 @@ def register():
         return Response(_sanitize_record(record), 201, content_type='application/json')
     except Exception as err:
         logger.error(
-            f'encountred an error while saving the asset data to MetadataDB: {str(err)}'
+            f'encountered an error while saving the asset data to MetadataDB: {str(err)}'
         )
         return f'Some error: {str(err)}', 500
 
@@ -400,11 +400,13 @@ def _sanitize_date(o):
 def _sanitize_record(data_record):
     if '_id' in data_record:
         data_record.pop('_id')
-    data_record['created'] = _sanitize_date(data_record['created'])
-    for i, service in enumerate(data_record['service']):
-        if service['type'] == 'metadata':
-            cleaned = _sanitize_date(data_record['service'][i]['attributes']['main']['dateCreated'])
-            data_record['service'][i]['attributes']['main']['dateCreated'] = cleaned
+    if 'created' in data_record:
+        data_record['created'] = _sanitize_date(data_record['created'])
+    if 'service' in data_record:
+        for i, service in enumerate(data_record['service']):
+            if service['type'] == 'metadata':
+                cleaned = _sanitize_date(data_record['service'][i]['attributes']['main']['dateCreated'])
+                data_record['service'][i]['attributes']['main']['dateCreated'] = cleaned
     return json.dumps(data_record, default=_my_converter)
 
 def check_required_attributes(required_attributes, data, method):
