@@ -15,7 +15,7 @@ parameters:
         query:
           type: string
           description: Query to realize
-          example: {"bool": { "must": [{"match": { "attributes.main.name": "nftSalesAgreement" }}]}}
+          example: {"query": {"bool": { "must": [{"match": { "attributes.main.name": "nftSalesAgreement" }}]}}}
         sort:
           type: object
           description: Key or list of keys to sort the result
