@@ -218,6 +218,15 @@ def test_service_creation_and_retrieval(client, base_service_url, json_service):
     assert json.loads(
         client.get(base_service_url + '/%s' % json_service['agreementId']).data.decode('utf-8'))['index'] == 6
 
+def test_service_creation_and_query(client, base_service_url, json_service):
+    client.post(base_service_url,
+                data=json.dumps(json_service),
+                content_type='application/json')
+    assert len(json.loads(
+         client.post(base_service_url + '/query',
+                    data=json.dumps({"query": {}}),
+                    content_type='application/json').data.decode('utf-8'))['results']) == 1
+
 
 def test_date_format_validator():
     date = '2016-02-08T16:02:20Z'

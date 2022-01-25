@@ -206,6 +206,17 @@ class Dao(object):
             id=service_id
         )['_source']
 
+    def query_service(self, query):
+        query_list = []
+        res = self._es.search(index=self._service_index, query=query)
+        print("Got %d Hits:" % res['hits']['total']['value'])
+        if 'hits' not in res:
+            return
+        for hit in res['hits']['hits']:
+            print("%(timestamp)s %(author)s: %(text)s" % hit["_source"])
+            query_list.append(hit['_source'])
+        return query_list
+
     def _init_elasticsearch(self):
         mapping = {
             'mappings': {

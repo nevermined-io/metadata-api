@@ -91,6 +91,38 @@ def get_service(serviceId):
         logger.error(e)
         return f'An exception happened during fetching of {serviceId} service.', 500
 
+@assets.route('/service/query', methods=['POST'])
+def query_service():
+    """Get a list of Services that match with the executed query.
+    swagger_from_file: docs/query_service.yml
+    """
+    assert isinstance(request.json, dict), 'invalid payload format.'
+    data = request.json
+    assert isinstance(data, dict), 'invalid `body` type, should be formatted as a dict.'
+    if 'query' in data:
+        search_model = QueryModel(
+            query=data.get('query'),
+            sort=data.get('sort'),
+            offset=data.get('offset', 100),
+            page=data.get('page', 1),
+        )
+    else:
+        search_model = QueryModel(
+            query={},
+            sort=data.get('sort'),
+            offset=data.get('offset', 100),
+            page=data.get('page', 1),
+        )
+    query_result = get_dao().query_service(search_model)
+    for i in query_result[0]:
+        _sanitize_record(i)
+    response = _make_paginate_response(query_result, search_model)
+    return Response(
+        json.dumps(response, default=_my_converter),
+        200,
+        content_type='application/json',
+    )
+
 
 @assets.route('/service', methods=['POST'])
 def register_service():
