@@ -363,7 +363,6 @@ def retire_all():
 def _date_to_datetime(asset):
     result = copy.deepcopy(asset)
     result['created'] = datetime.strptime(result['created'], '%Y-%m-%dT%H:%M:%SZ')
-    print(result['created'])
 
     for i, service in enumerate(result['service']):
         if service['type'] == 'metadata':
