@@ -138,7 +138,7 @@ def register_service():
     if msg:
         return msg, status
     try:
-        agreement_id = data.pop('agreementId')
+        agreement_id = data['agreementId']
         get_dao().persist_service(agreement_id, data)
         # add new assetId to response
         return Response(_sanitize_record(data), 201, content_type='application/json')
