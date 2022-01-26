@@ -261,6 +261,9 @@ class Dao(object):
         serviceMapping = {
             'mappings': {
                 'properties': {
+                    'agreementId': {
+                        'type': 'text'
+                    },
                     'type': {
                         'type': 'text'
                     },
