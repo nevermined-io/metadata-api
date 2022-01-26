@@ -206,6 +206,15 @@ class Dao(object):
             id=service_id
         )['_source']
 
+    def query_service(self, query):
+        query_list = []
+        res = self._es.search(index=self._service_index, body=query)
+        if 'hits' not in res:
+            return
+        for hit in res['hits']['hits']:
+            query_list.append(hit['_source'])
+        return query_list
+
     def _init_elasticsearch(self):
         mapping = {
             'mappings': {
@@ -252,11 +261,17 @@ class Dao(object):
         serviceMapping = {
             'mappings': {
                 'properties': {
+                    'agreementId': {
+                        'type': 'text'
+                    },
                     'type': {
                         'type': 'text'
                     },
                     'index': {
                         'type': 'long'
+                    },
+                    'did': {
+                        'type': 'text'
                     },
                     'serviceEndpoint': {
                         'type': 'text'
