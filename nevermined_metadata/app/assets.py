@@ -102,7 +102,11 @@ def query_service():
     
     query_result = get_dao().query_service(query_model)
     if not query_result:
-        return 'No results found', 404
+        return Response(
+            json.dumps([], default=_my_converter),
+            200,
+            content_type='application/json',
+        )
     for i in query_result[0]:
         _sanitize_record(i)
     return Response(
