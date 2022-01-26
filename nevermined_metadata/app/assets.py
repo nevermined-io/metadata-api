@@ -417,15 +417,16 @@ def _sanitize_date(o):
         return o + 'Z'
 
 def _sanitize_record(data_record):
-    if '_id' in data_record:
-        data_record.pop('_id')
-    if 'created' in data_record:
-        data_record['created'] = _sanitize_date(data_record['created'])
-    if 'service' in data_record:
-        for i, service in enumerate(data_record['service']):
-            if service['type'] == 'metadata':
-                cleaned = _sanitize_date(data_record['service'][i]['attributes']['main']['dateCreated'])
-                data_record['service'][i]['attributes']['main']['dateCreated'] = cleaned
+    if type(data_record) is dict:
+        if '_id' in data_record:
+            data_record.pop('_id')
+        if 'created' in data_record:
+            data_record['created'] = _sanitize_date(data_record['created'])
+        if 'service' in data_record:
+            for i, service in enumerate(data_record['service']):
+                if service['type'] == 'metadata':
+                    cleaned = _sanitize_date(data_record['service'][i]['attributes']['main']['dateCreated'])
+                    data_record['service'][i]['attributes']['main']['dateCreated'] = cleaned
     return json.dumps(data_record, default=_my_converter)
 
 def check_required_attributes(required_attributes, data, method):
