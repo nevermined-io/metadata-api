@@ -3,8 +3,8 @@ name: Push documentation to docs repo
 on:
   workflow_dispatch:
   push:
-    branches:
-      - push-to-docs
+    tags:
+      - v*
 
 jobs:
   push-to-docs:
