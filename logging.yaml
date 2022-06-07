@@ -34,7 +34,11 @@ loggers:
         level: ERROR
         handlers: [console]
         propagate: no
+    nevermined_metadata:
+        level: INFO
+        handlers: [console]
+        propagate: no
 
 root:
     level: INFO
-    handlers: [console]
+    handlers: [console, info_file_handler, error_file_handler]
