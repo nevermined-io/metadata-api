@@ -23,7 +23,7 @@ with open('CHANGELOG.md') as history_file:
     'nevermined-metadata-driver-interface>=0.2.0',
     'nevermined-metadata-driver-mongodb>=0.1.0',
     'nevermined-metadata-driver-elasticsearch>=0.1.6',
-    'nevermined-metadata-driver-arweave>=0.1.3',
+    'nevermined-metadata-driver-arweave>=0.1.4',
     'PyYAML==5.4.1',
     'pytz==2021.1',
     'uwsgidecorators==1.1.0',
