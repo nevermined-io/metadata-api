@@ -62,7 +62,7 @@ Before installing Nevermined Metadatas's Python package requirements, you should
 The most simple way to start is:
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements_dev.txt
 export FLASK_APP=nevermined_metadata/run.py
 export CONFIG_FILE=config.ini
 flask run
